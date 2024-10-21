@@ -128,6 +128,19 @@ public class PlayerMovement : MonoBehaviour
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
     }
 
+    void ShowProjectile(){
+        var velocity = new Vector2();
+        var CurrentVelocity = rb.linearVelocity/2;
+        var energyNeed = minEnergyNeed+(energyNeedMul * cursorReleasePos.magnitude);
+        var direction = (-cursorReleasePos).normalized;
+        if(energyNeed > energyRemaining){
+            velocity = CurrentVelocity + direction*energyRemaining*forceMul;
+        }
+        else{
+            velocity = CurrentVelocity + direction*energyNeed*forceMul;
+        }
+    }
+
     void OnCursorRelease(){
         rb.linearVelocity = rb.linearVelocity/2;
         var energyNeed = minEnergyNeed+(energyNeedMul * cursorReleasePos.magnitude);
