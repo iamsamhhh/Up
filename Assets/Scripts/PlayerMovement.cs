@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool alreadyPaused;
     
+    [SerializeField]    List<GameObject> dots;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +60,10 @@ public class PlayerMovement : MonoBehaviour
         Time.timeScale = 1;
         rb = GetComponent<Rigidbody2D>();
         gameOverPanel.SetActive(false);
+        foreach (var Go in dots){
+            Go.SetActive(false);
+
+        }
     }
 
     Vector2 velocityBeforePause;
@@ -112,6 +117,9 @@ public class PlayerMovement : MonoBehaviour
             }
             if(Input.GetMouseButtonDown(0)){
                 Time.timeScale = timeScale;
+                foreach (var dot in dots){
+                    dot.SetActive(true);
+                }
             }
             if(Input.GetMouseButton(0)){
                 OnCursorPress();
@@ -120,12 +128,16 @@ public class PlayerMovement : MonoBehaviour
             if(Input.GetMouseButtonUp(0)){
                 OnCursorRelease();
                 Time.timeScale = 1;
+                foreach (var dot in dots){
+                    dot.SetActive(false);
+                }
             }
         }
     }
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
+        ShowProjectile();
     }
 
     void ShowProjectile(){
@@ -134,10 +146,18 @@ public class PlayerMovement : MonoBehaviour
         var energyNeed = minEnergyNeed+(energyNeedMul * cursorReleasePos.magnitude);
         var direction = (-cursorReleasePos).normalized;
         if(energyNeed > energyRemaining){
-            velocity = CurrentVelocity + direction*energyRemaining*forceMul;
+            velocity = CurrentVelocity + direction*energyRemaining*forceMul/50;
         }
         else{
-            velocity = CurrentVelocity + direction*energyNeed*forceMul;
+            velocity = CurrentVelocity + direction*energyNeed*forceMul/50;
+        }
+        float t = 0.0f;
+        foreach(var dot in dots){
+            var x = velocity.x*t+transform.position.x;
+            var y = velocity.y*t+0.5f*(-9.81f)*t*t+transform.position.y;
+            Debug.Log("velocity: "+velocity+" x: "+x+" y: "+y);
+            dot.transform.position = new Vector3(x, y);
+            t += 0.2f;
         }
     }
 

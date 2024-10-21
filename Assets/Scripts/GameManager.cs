@@ -10,6 +10,8 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
 
     public bool cameFromGame, gamePaused;
     private void Awake() {
+        QualitySettings.vSyncCount = 0;  // VSync must be disabled
+	    Application.targetFrameRate = 120;
         // SaveMgr.instance.isBuild = true;
         cameFromGame = false;
         gamePaused = false;
