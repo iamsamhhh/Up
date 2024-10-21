@@ -42,12 +42,16 @@ public class PlayerMovement : MonoBehaviour
 
     int goldCount;
 
+    bool alreadyPaused;
+    
+
     // Start is called before the first frame update
     void Start()
     {
         reachedNextLevel = false;
         gameOver = false;
         goldCount = 0;
+        alreadyPaused = false;
         maxEnergy = GameManager.instance.maxEnergyLv*maxEnergyIncreasePerLv+initialEnergy;
         energyRemaining = maxEnergy;
         energyRefuel = initialEnergyRefuel + GameManager.instance.energyRefuelLv*energyRefuelIncreasePerLv;
@@ -57,47 +61,66 @@ public class PlayerMovement : MonoBehaviour
         gameOverPanel.SetActive(false);
     }
 
+    Vector2 velocityBeforePause;
     // Update is called once per frame
     void Update()
     {
         miniMapCamTrans.position = new Vector3(transform.position.x, transform.position.y, miniMapCamTrans.position.z);
         if (gameOver) return;
-        lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
-        energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
-        heightSlider.fillAmount = transform.position.y / 1000;
-        heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
-        heightText.text = ((int)transform.position.y).ToString();
-        slider.fillAmount = energyRemaining/maxEnergy;
-        if (transform.position.y <= 0.5 & !gameOver){
-            gameOverPanel.SetActive(true);
-            GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
-            GameManager.instance.SaveGame();
-            Time.timeScale = 0.3f;
-            gameOver = true;
-            return;
+        if (GameManager.instance.gamePaused){
+            if (alreadyPaused) {
+                rb.linearVelocity = new Vector2(0, 0);
+            }
+            else{
+                velocityBeforePause = rb.linearVelocity;
+                alreadyPaused = true;
+                rb.linearVelocity = new Vector2(0, 0);
+            }
         }
+        else{
+            if (alreadyPaused){
+                rb.linearVelocity = velocityBeforePause;
+                alreadyPaused = false;
+            }
+            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
+            energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
+            heightSlider.fillAmount = transform.position.y / 1000;
+            heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
+            heightText.text = ((int)transform.position.y).ToString();
+            GameManager.instance.inGameCoinCnt = goldCount;
+            slider.fillAmount = energyRemaining/maxEnergy;
+            // gameover
+            if (transform.position.y <= 0.5 & !gameOver){
+                gameOverPanel.SetActive(true);
+                GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
+                GameManager.instance.SaveGame();
+                Time.timeScale = 0.3f;
+                gameOver = true;
+                return;
+            }
 
-        if (energyRemaining <= 0){
-            energyRemaining = 0;
-            return;
-        }
-        if (transform.position.y > 1000 && !reachedNextLevel){
-            GameManager.instance.gameLevel += 1;
-            reachedNextLevel = true;
-        }
-        else if (energyRemaining > maxEnergy){
-            energyRemaining = maxEnergy;
-        }
-        if(Input.GetMouseButtonDown(0)){
-            Time.timeScale = timeScale;
-        }
-        if(Input.GetMouseButton(0)){
-            OnCursorPress();
-            energyRemaining -= Time.deltaTime/(1/(energyNeedNormal*energyNeedSlowmoMul));
-        }
-        if(Input.GetMouseButtonUp(0)){
-            OnCursorRelease();
-            Time.timeScale = 1;
+            if (energyRemaining <= 0){
+                energyRemaining = 0;
+                return;
+            }
+            if (transform.position.y > 1000 && !reachedNextLevel){
+                GameManager.instance.gameLevel += 1;
+                reachedNextLevel = true;
+            }
+            else if (energyRemaining > maxEnergy){
+                energyRemaining = maxEnergy;
+            }
+            if(Input.GetMouseButtonDown(0)){
+                Time.timeScale = timeScale;
+            }
+            if(Input.GetMouseButton(0)){
+                OnCursorPress();
+                energyRemaining -= Time.deltaTime/(1/(energyNeedNormal*energyNeedSlowmoMul));
+            }
+            if(Input.GetMouseButtonUp(0)){
+                OnCursorRelease();
+                Time.timeScale = 1;
+            }
         }
     }
     void OnCursorPress(){
