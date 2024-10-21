@@ -6,12 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
-    public int coinCount, maxEnergyLv, energyRefuelLv, energyWasteLv, gameLevel;
+    public int coinCount, maxEnergyLv, energyRefuelLv, energyWasteLv, gameLevel, inGameCoinCnt;
 
-    public bool cameFromGame;
+    public bool cameFromGame, gamePaused;
     private void Awake() {
         // SaveMgr.instance.isBuild = true;
         cameFromGame = false;
+        gamePaused = false;
         // coinCount = PlayerPrefs.GetInt("CoinCount", 0);
 
         // maxEnergyLv = PlayerPrefs.GetInt("MaxEnergyLv", 0);
