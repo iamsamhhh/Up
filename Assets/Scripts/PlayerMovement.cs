@@ -80,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
                 velocityBeforePause = rb.linearVelocity;
                 alreadyPaused = true;
                 rb.linearVelocity = new Vector2(0, 0);
+                Time.timeScale = 1;
             }
         }
         else{
@@ -99,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
                 gameOverPanel.SetActive(true);
                 GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
                 GameManager.instance.SaveGame();
-                Time.timeScale = 0.3f;
+                rb.bodyType = RigidbodyType2D.Static;
                 gameOver = true;
                 return;
             }
@@ -155,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
         foreach(var dot in dots){
             var x = velocity.x*t+transform.position.x;
             var y = velocity.y*t+0.5f*(-9.81f)*t*t+transform.position.y;
-            Debug.Log("velocity: "+velocity+" x: "+x+" y: "+y);
+            // Debug.Log("velocity: "+velocity+" x: "+x+" y: "+y);
             dot.transform.position = new Vector3(x, y);
             t += 0.2f;
         }
@@ -194,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
 
     // TODO: Find out should coin provide energy
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("On trigger enter");
+        // Debug.Log("On trigger enter");
         if (other.gameObject.tag == "Coin"){
             energyRemaining += energyRefuel/2;
             goldCount++;
