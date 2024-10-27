@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool alreadyPaused;
     
+    [SerializeField]    List<GameObject> dots;
 
     // Start is called before the first frame update
     void Start()
@@ -57,8 +58,13 @@ public class PlayerMovement : MonoBehaviour
         energyRefuel = initialEnergyRefuel + GameManager.instance.energyRefuelLv*energyRefuelIncreasePerLv;
         energyWastePercentage = (100-GameManager.instance.energyWasteLv*energyWasteReducePercentagePerLv)/100;
         Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
         gameOverPanel.SetActive(false);
+        foreach (var Go in dots){
+            Go.SetActive(false);
+
+        }
     }
 
     Vector2 velocityBeforePause;
@@ -68,18 +74,25 @@ public class PlayerMovement : MonoBehaviour
         miniMapCamTrans.position = new Vector3(transform.position.x, transform.position.y, miniMapCamTrans.position.z);
         if (gameOver) return;
         if (GameManager.instance.gamePaused){
-            if (alreadyPaused) {
-                rb.linearVelocity = new Vector2(0, 0);
-            }
-            else{
-                velocityBeforePause = rb.linearVelocity;
+            // if (alreadyPaused) {
+            //     rb.linearVelocity = new Vector2(0, 0);
+            // }
+            // else{
+            //     velocityBeforePause = rb.linearVelocity;
+            //     alreadyPaused = true;
+            //     rb.linearVelocity = new Vector2(0, 0);
+            //     Time.timeScale = 1;
+            // }
+            if (!alreadyPaused){
                 alreadyPaused = true;
-                rb.linearVelocity = new Vector2(0, 0);
             }
+            Time.timeScale = 0;
+            return;
         }
         else{
             if (alreadyPaused){
-                rb.linearVelocity = velocityBeforePause;
+                // rb.linearVelocity = velocityBeforePause;
+                Time.timeScale = 1;
                 alreadyPaused = false;
             }
             lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
@@ -89,12 +102,14 @@ public class PlayerMovement : MonoBehaviour
             heightText.text = ((int)transform.position.y).ToString();
             GameManager.instance.inGameCoinCnt = goldCount;
             slider.fillAmount = energyRemaining/maxEnergy;
+
             // gameover
             if (transform.position.y <= 0.5 & !gameOver){
                 gameOverPanel.SetActive(true);
                 GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
                 GameManager.instance.SaveGame();
-                Time.timeScale = 0.3f;
+                // rb.bodyType = RigidbodyType2D.Static;
+                Time.timeScale = 0;
                 gameOver = true;
                 return;
             }
@@ -112,6 +127,10 @@ public class PlayerMovement : MonoBehaviour
             }
             if(Input.GetMouseButtonDown(0)){
                 Time.timeScale = timeScale;
+                Time.fixedDeltaTime = 0.02f * timeScale;
+                foreach (var dot in dots){
+                    dot.SetActive(true);
+                }
             }
             if(Input.GetMouseButton(0)){
                 OnCursorPress();
@@ -120,12 +139,38 @@ public class PlayerMovement : MonoBehaviour
             if(Input.GetMouseButtonUp(0)){
                 OnCursorRelease();
                 Time.timeScale = 1;
+                Time.fixedDeltaTime = 0.02f;
+                foreach (var dot in dots){
+                    dot.SetActive(false);
+                }
             }
         }
     }
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
+        ShowProjectile();
+    }
+
+    void ShowProjectile(){
+        var velocity = new Vector2();
+        var CurrentVelocity = rb.linearVelocity/2;
+        var energyNeed = minEnergyNeed+(energyNeedMul * cursorReleasePos.magnitude);
+        var direction = (-cursorReleasePos).normalized;
+        if(energyNeed > energyRemaining){
+            velocity = CurrentVelocity + direction*energyRemaining*forceMul/50;
+        }
+        else{
+            velocity = CurrentVelocity + direction*energyNeed*forceMul/50;
+        }
+        float t = 0.0f;
+        foreach(var dot in dots){
+            var x = velocity.x*t+transform.position.x;
+            var y = velocity.y*t+0.5f*(-9.81f)*t*t+transform.position.y;
+            // Debug.Log("velocity: "+velocity+" x: "+x+" y: "+y);
+            dot.transform.position = new Vector3(x, y);
+            t += 0.2f;
+        }
     }
 
     void OnCursorRelease(){
@@ -161,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
 
     // TODO: Find out should coin provide energy
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("On trigger enter");
+        // Debug.Log("On trigger enter");
         if (other.gameObject.tag == "Coin"){
             energyRemaining += energyRefuel/2;
             goldCount++;
