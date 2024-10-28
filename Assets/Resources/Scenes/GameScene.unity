@@ -2652,6 +2652,8 @@ MonoBehaviour:
   energyNeedSlowmoMul: 5
   initialEnergy: 100
   energyRemaining: 0
+  lavaDistance: 100
+  lavaSpeed: 3
   maxEnergyIncreasePerLv: 10
   energyRefuelIncreasePerLv: 3
   energyWasteReducePercentagePerLv: 1
@@ -2768,8 +2770,8 @@ TrailRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
-    numCapVertices: 0
+    numCornerVertices: 1
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
@@ -4269,7 +4271,7 @@ Transform:
   m_GameObject: {fileID: 1693575837}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -15, z: 0}
+  m_LocalPosition: {x: 0, y: -30, z: 0}
   m_LocalScale: {x: 50, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnergyGenerator : MonoBehaviour
 {
@@ -15,21 +16,24 @@ public class EnergyGenerator : MonoBehaviour
     [SerializeField]
     int maxNumOfEnergy, numOfBombAddPerLv, maxNumOfCoin, noSpawningDistance;
     int numOfBomb;
+    int supposedNumOfEnergy;
     [SerializeField]
     Vector2 scrWidthAndHeight;
 
     List<Transform> energyList = new List<Transform>();
     List<Transform> bombList = new List<Transform>();
     List<Transform> coinList = new List<Transform>();
+    List<Transform> energyToBeDeleted = new List<Transform>();
 
     void Awake()
     {
+        supposedNumOfEnergy = maxNumOfEnergy;
         numOfBomb = (GameManager.instance.gameLevel-1)*numOfBombAddPerLv;
-        maxNumOfEnergy -= numOfBomb;
-        if (maxNumOfEnergy < 0){
-            maxNumOfEnergy = 0;
+        supposedNumOfEnergy -= numOfBomb;
+        if (supposedNumOfEnergy < 0){
+            supposedNumOfEnergy = 0;
         }
-        for (int i = 0; i < maxNumOfEnergy; i++){
+        for (int i = 0; i < supposedNumOfEnergy; i++){
             var randx = Random.Range(player.position.x - widthAndHeight.x/2, player.position.x + widthAndHeight.x/2);
             var randy = Random.Range(player.position.y - widthAndHeight.y/2, player.position.y + widthAndHeight.y/2);
             energyList.Add(Instantiate(energyPrefeb, new Vector2(randx, randy), Quaternion.identity).transform);
@@ -57,7 +61,7 @@ public class EnergyGenerator : MonoBehaviour
         {
             // Check if the energy is too far away
             if((player.position - energy.position).magnitude > despawnDistance){
-                Recycle(energy);
+                Recycle(energy, EObjectType.Energy);
             }
             else if (energy.position.y <= 3){
                 energy.gameObject.SetActive(false);
@@ -65,7 +69,7 @@ public class EnergyGenerator : MonoBehaviour
         }
         foreach (var bomb in bombList){
             if((player.position - bomb.position).magnitude > despawnDistance){
-                Recycle(bomb);
+                Recycle(bomb, EObjectType.Bomb);
             }
             else if (bomb.position.y <= 3){
                 bomb.gameObject.SetActive(false);
@@ -73,19 +77,49 @@ public class EnergyGenerator : MonoBehaviour
         }
         foreach (var coin in coinList){
             if((player.position - coin.position).magnitude > despawnDistance){
-                Recycle(coin);
+                Recycle(coin, EObjectType.Coin);
             }
             else if (coin.position.y <= 3){
                 coin.gameObject.SetActive(false);
             }
         }
+
+        foreach(var energy in energyToBeDeleted){
+            energyList.Remove(energy);
+            Destroy(energy.gameObject);
+        }
+
+        energyToBeDeleted.Clear();
+    }
+
+    public void LevelUp(){
+        var newNumOfBomb = (GameManager.instance.gameLevel-1)*numOfBombAddPerLv;
+        var numOfBombDiff = newNumOfBomb - numOfBomb;
+        supposedNumOfEnergy = maxNumOfEnergy - newNumOfBomb;
+        for (int i = 0; i < numOfBombDiff; i++){
+            var bomb = Instantiate(bombPrefeb);
+            bombList.Add(bomb.transform);
+            RemoveObject(bomb.transform, EObjectType.Bomb);
+        }
+        numOfBomb = newNumOfBomb;
     }
 
     /// <summary>
     /// Activate when object are out of range
     /// </summary>
     /// <param name="objectTrans"></param>
-    private void Recycle(Transform objectTrans){
+    private void Recycle(Transform objectTrans, EObjectType type){
+        switch(type){
+            case EObjectType.Energy:
+                if (energyList.Count > supposedNumOfEnergy){
+                    energyToBeDeleted.Add(objectTrans);
+                    return;
+                }
+                break;
+            case EObjectType.Bomb: 
+                break;
+        }
+
         var spawnDirection = (player.position - objectTrans.position).normalized;
         
         objectTrans.gameObject.SetActive(true);
@@ -101,14 +135,24 @@ public class EnergyGenerator : MonoBehaviour
     /// Activate when object are hit
     /// </summary>
     /// <param name="ObjectTrans"></param>
-    public void RemoveObject(Transform ObjectTrans){
+    public void RemoveObject(Transform objectTrans, EObjectType type){
+        switch(type){
+            case EObjectType.Energy:
+                if (energyList.Count > supposedNumOfEnergy){
+                    energyToBeDeleted.Add(objectTrans);
+                    return;
+                }
+                break;
+            case EObjectType.Bomb: 
+                break;
+        }
         var randx = Random.Range(player.position.x - widthAndHeight.x/2, player.position.x + widthAndHeight.x/2);
         var randy = Random.Range(player.position.y - widthAndHeight.y/2, player.position.y + widthAndHeight.y/2);
         if (!SpawnInSight(randx, randy)){
-            ObjectTrans.position = new Vector2(randx, randy);
+            objectTrans.position = new Vector2(randx, randy);
         }
         else{
-            RemoveObject(ObjectTrans);
+            RemoveObject(objectTrans, type);
         }
     }
 
