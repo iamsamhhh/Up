@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
                 Time.timeScale = 1;
                 alreadyPaused = false;
             }
-            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
+            UpdateLava();
             energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
             heightSlider.fillAmount = transform.position.y / 1000;
             heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
             slider.fillAmount = energyRemaining/maxEnergy;
 
             // gameover
-            if (transform.position.y <= 0.5 & !gameOver){
+            if (transform.position.y <= lavaTrans.position.y + 15.5 & !gameOver){
                 gameOverPanel.SetActive(true);
                 GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
                 GameManager.instance.SaveGame();
@@ -150,6 +150,15 @@ public class PlayerMovement : MonoBehaviour
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
         ShowProjectile();
+    }
+
+    void UpdateLava(){
+        if ((transform.position.y - lavaTrans.position.y) < 115){
+            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
+        }
+        else{
+            lavaTrans.position = new Vector2(transform.position.x, transform.position.y-115);
+        }
     }
 
     void ShowProjectile(){
