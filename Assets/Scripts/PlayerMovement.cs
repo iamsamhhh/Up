@@ -18,7 +18,8 @@ public class PlayerMovement : MonoBehaviour
     minEnergyNeed, energyNeedMul,
     initialEnergyRefuel, energyNeedNormal,
     energyNeedSlowmoMul, initialEnergy, 
-    energyRemaining;
+    energyRemaining, lavaDistance,
+    lavaSpeed;
 
     [SerializeField]
     float maxEnergyIncreasePerLv, energyRefuelIncreasePerLv, energyWasteReducePercentagePerLv;
@@ -40,11 +41,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     TMPro.TMP_Text heightText, goldCountText;
 
-    int goldCount;
+    int goldCount, levelWhenGameStart, currentLevel;
 
     bool alreadyPaused;
     
-    [SerializeField]    List<GameObject> dots;
+    [SerializeField]    
+    List<GameObject> dots;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
         gameOver = false;
         goldCount = 0;
         alreadyPaused = false;
+        levelWhenGameStart = GameManager.instance.gameLevel;
+        currentLevel = levelWhenGameStart;
         maxEnergy = GameManager.instance.maxEnergyLv*maxEnergyIncreasePerLv+initialEnergy;
         energyRemaining = maxEnergy;
         energyRefuel = initialEnergyRefuel + GameManager.instance.energyRefuelLv*energyRefuelIncreasePerLv;
@@ -63,86 +67,73 @@ public class PlayerMovement : MonoBehaviour
         gameOverPanel.SetActive(false);
         foreach (var Go in dots){
             Go.SetActive(false);
-
         }
     }
 
-    Vector2 velocityBeforePause;
     // Update is called once per frame
     void Update()
     {
         miniMapCamTrans.position = new Vector3(transform.position.x, transform.position.y, miniMapCamTrans.position.z);
         if (gameOver) return;
         if (GameManager.instance.gamePaused){
-            // if (alreadyPaused) {
-            //     rb.linearVelocity = new Vector2(0, 0);
-            // }
-            // else{
-            //     velocityBeforePause = rb.linearVelocity;
-            //     alreadyPaused = true;
-            //     rb.linearVelocity = new Vector2(0, 0);
-            //     Time.timeScale = 1;
-            // }
             if (!alreadyPaused){
                 alreadyPaused = true;
             }
             Time.timeScale = 0;
             return;
         }
-        else{
-            if (alreadyPaused){
-                // rb.linearVelocity = velocityBeforePause;
-                Time.timeScale = 1;
-                alreadyPaused = false;
-            }
-            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y);
-            energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
-            heightSlider.fillAmount = transform.position.y / 1000;
-            heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
-            heightText.text = ((int)transform.position.y).ToString();
-            GameManager.instance.inGameCoinCnt = goldCount;
-            slider.fillAmount = energyRemaining/maxEnergy;
+        
+        if (alreadyPaused){
+            // rb.linearVelocity = velocityBeforePause;
+            Time.timeScale = 1;
+            alreadyPaused = false;
+        }
 
-            // gameover
-            if (transform.position.y <= 0.5 & !gameOver){
-                gameOverPanel.SetActive(true);
-                GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
-                GameManager.instance.SaveGame();
-                // rb.bodyType = RigidbodyType2D.Static;
-                Time.timeScale = 0;
-                gameOver = true;
-                return;
-            }
+        UpdateLava();
 
-            if (energyRemaining <= 0){
-                energyRemaining = 0;
-                return;
+        energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
+        UpdateHeightIndicator();
+        GameManager.instance.inGameCoinCnt = goldCount;
+        slider.fillAmount = energyRemaining/maxEnergy;
+
+        // gameover
+        if (transform.position.y <= lavaTrans.position.y + 15.5 & !gameOver){
+            gameOverPanel.SetActive(true);
+            GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
+            GameManager.instance.SaveGame();
+            // rb.bodyType = RigidbodyType2D.Static;
+            Time.timeScale = 0;
+            gameOver = true;
+            return;
+        }
+
+        if (energyRemaining <= 0){
+            energyRemaining = 0;
+            return;
+        }
+
+        UpdateLevel();
+
+        if (energyRemaining > maxEnergy){
+            energyRemaining = maxEnergy;
+        }
+        if(Input.GetMouseButtonDown(0)){
+            Time.timeScale = timeScale;
+            Time.fixedDeltaTime = 0.02f * timeScale;
+            foreach (var dot in dots){
+                dot.SetActive(true);
             }
-            if (transform.position.y > 1000 && !reachedNextLevel){
-                GameManager.instance.gameLevel += 1;
-                reachedNextLevel = true;
-            }
-            else if (energyRemaining > maxEnergy){
-                energyRemaining = maxEnergy;
-            }
-            if(Input.GetMouseButtonDown(0)){
-                Time.timeScale = timeScale;
-                Time.fixedDeltaTime = 0.02f * timeScale;
-                foreach (var dot in dots){
-                    dot.SetActive(true);
-                }
-            }
-            if(Input.GetMouseButton(0)){
-                OnCursorPress();
-                energyRemaining -= Time.deltaTime/(1/(energyNeedNormal*energyNeedSlowmoMul));
-            }
-            if(Input.GetMouseButtonUp(0)){
-                OnCursorRelease();
-                Time.timeScale = 1;
-                Time.fixedDeltaTime = 0.02f;
-                foreach (var dot in dots){
-                    dot.SetActive(false);
-                }
+        }
+        if(Input.GetMouseButton(0)){
+            OnCursorPress();
+            energyRemaining -= Time.deltaTime/(1/(energyNeedNormal*energyNeedSlowmoMul));
+        }
+        if(Input.GetMouseButtonUp(0)){
+            OnCursorRelease();
+            Time.timeScale = 1;
+            Time.fixedDeltaTime = 0.02f;
+            foreach (var dot in dots){
+                dot.SetActive(false);
             }
         }
     }
@@ -150,6 +141,34 @@ public class PlayerMovement : MonoBehaviour
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
         ShowProjectile();
+    }
+
+    void UpdateLava(){
+        if ((transform.position.y - lavaTrans.position.y) < lavaDistance + 15){
+            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y + lavaSpeed*Time.deltaTime/Time.timeScale);
+
+        }
+        else{
+            lavaTrans.position = new Vector2(transform.position.x, transform.position.y-(lavaDistance + 15));
+        }
+    }
+
+    void UpdateHeightIndicator(){
+        heightSlider.fillAmount = transform.position.y / 1000;
+        heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
+        heightText.text = ((int)(transform.position.y+(levelWhenGameStart-1)*1000)).ToString();
+    }
+
+    void UpdateLevel(){
+        var level = levelWhenGameStart + (int)(transform.position.y/1000);
+        if (currentLevel < level){
+            var levelDiff = level - currentLevel;
+            for (var i = 0; i < levelDiff; i++){
+                GameManager.instance.gameLevel++;
+                generator.LevelUp();
+                currentLevel++;
+            }
+        }
     }
 
     void ShowProjectile(){
@@ -193,13 +212,13 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.tag == "Energy"){
             var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
-            generator.RemoveObject(other.transform);
+            generator.RemoveObject(other.transform, EObjectType.Energy);
             energyRemaining += energyRefuel;
         }
         if (other.gameObject.tag == "Bomb"){
             var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
-            generator.RemoveObject(other.transform);
+            generator.RemoveObject(other.transform, EObjectType.Bomb);
             energyRemaining -= 30;
         }
     }
@@ -210,7 +229,7 @@ public class PlayerMovement : MonoBehaviour
         if (other.gameObject.tag == "Coin"){
             energyRemaining += energyRefuel/2;
             goldCount++;
-            generator.RemoveObject(other.transform);
+            generator.RemoveObject(other.transform, EObjectType.Coin);
             goldCountText.text = goldCount.ToString();
         }
     }
