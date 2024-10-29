@@ -2484,8 +2484,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1087481886}
-  - component: {fileID: 1087481890}
   - component: {fileID: 1087481885}
+  - component: {fileID: 1087481890}
   - component: {fileID: 1087481887}
   - component: {fileID: 1087481888}
   - component: {fileID: 1087481889}
@@ -2770,8 +2770,8 @@ TrailRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 1
-    numCapVertices: 1
+    numCornerVertices: 0
+    numCapVertices: 0
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}

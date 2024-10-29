@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     TMPro.TMP_Text heightText, goldCountText;
 
-    int goldCount;
+    int goldCount, levelWhenGameStart, currentLevel;
 
     bool alreadyPaused;
     
@@ -55,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
         gameOver = false;
         goldCount = 0;
         alreadyPaused = false;
+        levelWhenGameStart = GameManager.instance.gameLevel;
+        currentLevel = levelWhenGameStart;
         maxEnergy = GameManager.instance.maxEnergyLv*maxEnergyIncreasePerLv+initialEnergy;
         energyRemaining = maxEnergy;
         energyRefuel = initialEnergyRefuel + GameManager.instance.energyRefuelLv*energyRefuelIncreasePerLv;
@@ -90,9 +92,7 @@ public class PlayerMovement : MonoBehaviour
         UpdateLava();
 
         energyRemaining -= Time.deltaTime/(1/energyNeedNormal);
-        heightSlider.fillAmount = transform.position.y / 1000;
-        heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
-        heightText.text = ((int)transform.position.y).ToString();
+        UpdateHeightIndicator();
         GameManager.instance.inGameCoinCnt = goldCount;
         slider.fillAmount = energyRemaining/maxEnergy;
 
@@ -106,17 +106,15 @@ public class PlayerMovement : MonoBehaviour
             gameOver = true;
             return;
         }
+
         if (energyRemaining <= 0){
             energyRemaining = 0;
             return;
         }
-        // Passed level
-        if (transform.position.y > 1000 && !reachedNextLevel){
-            GameManager.instance.gameLevel += 1;
-            generator.LevelUp();
-            reachedNextLevel = true;
-        }
-        else if (energyRemaining > maxEnergy){
+
+        UpdateLevel();
+
+        if (energyRemaining > maxEnergy){
             energyRemaining = maxEnergy;
         }
         if(Input.GetMouseButtonDown(0)){
@@ -138,7 +136,6 @@ public class PlayerMovement : MonoBehaviour
                 dot.SetActive(false);
             }
         }
-        
     }
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -153,6 +150,24 @@ public class PlayerMovement : MonoBehaviour
         }
         else{
             lavaTrans.position = new Vector2(transform.position.x, transform.position.y-(lavaDistance + 15));
+        }
+    }
+
+    void UpdateHeightIndicator(){
+        heightSlider.fillAmount = transform.position.y / 1000;
+        heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
+        heightText.text = ((int)(transform.position.y+(levelWhenGameStart-1)*1000)).ToString();
+    }
+
+    void UpdateLevel(){
+        var level = levelWhenGameStart + (int)(transform.position.y/1000);
+        if (currentLevel < level){
+            var levelDiff = level - currentLevel;
+            for (var i = 0; i < levelDiff; i++){
+                GameManager.instance.gameLevel++;
+                generator.LevelUp();
+                currentLevel++;
+            }
         }
     }
 
