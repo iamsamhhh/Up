@@ -4,6 +4,7 @@ using UnityEngine;
 using SFramework;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -31,6 +32,13 @@ public class MainMenuUIManager : MonoBehaviour
         guiMgr.RemovePanel("TitleMenu");
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
         guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
+        foreach (var skin in gameManager.skinList.skinList){
+            var btnGo = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent);
+            var btnScript = btnGo.GetComponent<SkinBtn>();
+            btnScript.skin = skin;
+            guiMgr.OnClick(btnGo.GetComponent<Button>(), btnScript.OnClick);
+            btnGo.GetComponent<RawImage>().texture = skin.thumbnail;
+        }
         mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
         guiMgr.OnClick(mainMenuComponents.GetSettingsBtn(), OnSettingsBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddMaxEnergyBtn(), OnAddMaxEnergyBtn);

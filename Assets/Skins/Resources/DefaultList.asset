@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f4fb77c52734acc82265c7fb3b536d, type: 3}
   m_Name: DefaultList
   m_EditorClassIdentifier: 
+  skinList:
+  - {fileID: 11400000, guid: 10a935d2fe41248e38431e46babfe31a, type: 2}
+  - {fileID: 11400000, guid: 325e47294a1e7421b826778ba9819197, type: 2}

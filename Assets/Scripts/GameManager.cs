@@ -9,12 +9,16 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     public int coinCount, maxEnergyLv, energyRefuelLv, energyWasteLv, gameLevel, inGameCoinCnt;
 
     public bool cameFromGame, gamePaused;
+    public Skin currentSkin;
+    public SkinList skinList;
     private void Awake() {
+        skinList = Resources.Load<SkinList>("DefaultList");
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
 	    Application.targetFrameRate = 120;
         // SaveMgr.instance.isBuild = true;
         cameFromGame = false;
         gamePaused = false;
+        currentSkin = skinList.skinList[0];
         // coinCount = PlayerPrefs.GetInt("CoinCount", 0);
 
         // maxEnergyLv = PlayerPrefs.GetInt("MaxEnergyLv", 0);

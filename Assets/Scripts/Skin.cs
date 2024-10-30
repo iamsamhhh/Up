@@ -8,5 +8,5 @@ public class Skin : ScriptableObject
     public Color trailColor;
     public Sprite sprite;
     public Color spriteColor;
-
+    public Texture2D thumbnail;
 }

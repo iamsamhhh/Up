@@ -13,7 +13,7 @@ public class MainMenuComponents : MonoBehaviour
     TMP_Text maxEnergyLvTxt, energyRefuelLvTxt, energyWasteLvTxt,
         coinCntTxt, gameLevelTxt,
         coin4MaxEnergyTxt, coin4EnergyRefuelTxt, coin4EnergyWasteTxt;
-    
+    public Transform skinContent;
     public Button GetAddMaxEnergyBtn(){return addMaxEnergyBtn;}
     public Button GetAddEnergyRefuelBtn(){return addEnergyRefuelBtn;}
     public Button GetAddEnergyWasteBtn(){return addEnergyWasteBtn;}
