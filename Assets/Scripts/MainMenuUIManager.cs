@@ -33,11 +33,11 @@ public class MainMenuUIManager : MonoBehaviour
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
         guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
         foreach (var skin in gameManager.skinList.skinList){
-            var btnGo = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent);
-            var btnScript = btnGo.GetComponent<SkinBtn>();
+            var btnScript = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent)
+                                .GetComponent<SkinBtn>();
             btnScript.skin = skin;
-            guiMgr.OnClick(btnGo.GetComponent<Button>(), btnScript.OnClick);
-            btnGo.GetComponent<RawImage>().texture = skin.thumbnail;
+            guiMgr.OnClick(btnScript.btn, btnScript.OnClick);
+            btnScript.rawImage.texture = skin.thumbnail;
         }
         mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
         guiMgr.OnClick(mainMenuComponents.GetSettingsBtn(), OnSettingsBtn);
@@ -72,7 +72,8 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
     private void OnSettingsBtn(){
-        var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top).GetComponent<SettingsPanelComponents>();
+        var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top)
+                                        .GetComponent<SettingsPanelComponents>();
         guiMgr.OnClick(settingsPanelComponents.GetExitGameBtn(), OnExitBtn);
         guiMgr.OnClick(settingsPanelComponents.GetXBtn(), OnSettingsXBtn);
         settingsPanelComponents.OnAddCoinBtn(OnAddCoinBtn);
