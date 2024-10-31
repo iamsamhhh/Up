@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace SFramework{
     public class SaveMgr : SingletonBase<SaveMgr>
@@ -140,6 +141,20 @@ namespace SFramework{
 
             xml.AppendChild(root);
             xml.Save(filePath + name + FILE_TYPE);
+        }
+
+        public void Save(object value, string name){
+            if (!Directory.Exists(filePath + "Objects")){
+                Directory.CreateDirectory(filePath + "Objects");
+            }
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream file = File. Create(filePath + "Objects/" + name + FILE_TYPE);
+
+            var json = JsonUtility.ToJson(value);
+
+            formatter.Serialize(file, json);
+
+            file.Close();
         }
 
 
@@ -311,6 +326,22 @@ namespace SFramework{
                 return xml.GetElementsByTagName(name)[0].InnerText;
             }
             return "";
+        }
+
+        public bool LoadObject(string name, object obj){
+            if (File.Exists(filePath + "Objects/" + name + FILE_TYPE)){
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream file = File.Open(filePath + "Objects/" + name + FILE_TYPE, FileMode.Open);
+
+                JsonUtility.FromJsonOverwrite((string)formatter.Deserialize(file), obj);
+
+                file.Close();
+                return true;
+            }
+            else{
+                Debug.LogWarning("File not found! (" + filePath + "Objects/" + name + FILE_TYPE + ")");
+                return false;
+            }
         }
     }
 }

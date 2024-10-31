@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace SFramework{
             private set{}
         }
 
+        private GameObject popUpPrefab;
+
         Transform top, middle, bottom;
 
         private Dictionary<string, GameObject> panelDict;
@@ -38,6 +41,7 @@ namespace SFramework{
             middle = canvas.transform.Find("Middle");
             bottom = canvas.transform.Find("Bottom");
             panelDict = new Dictionary<string, GameObject>();
+            popUpPrefab = Resources.Load<GameObject>("PopUp");
         }
 
 
@@ -78,6 +82,47 @@ namespace SFramework{
 
             return go;
         }
+
+        private GameObject popUpGO;
+        public PopUpBox AddPopUp(string message, UnityEngine.Events.UnityAction onConfirmBtn, UnityEngine.Events.UnityAction onCancelBtn){
+            if (_canvas == null) canvas.SetActive(true);
+            if (popUpGO != null){
+                Debug.LogWarning("There are already on pop up box in scene!");
+                return popUpGO.GetComponent<PopUpBox>();
+            }
+            var go = GameObject.Instantiate(popUpPrefab);
+
+            if (go == null) return null;
+
+            go.transform.SetParent(top);
+
+            var popUpbox = go.GetComponent<PopUpBox>();
+
+            OnClick(popUpbox.confirmBtn, onConfirmBtn);
+            OnClick(popUpbox.cancelBtn, onCancelBtn);
+            OnClick(popUpbox.XBtn, RemovePopUp);
+            OnClick(popUpbox.cancelBtn, RemovePopUp);
+            OnClick(popUpbox.confirmBtn, RemovePopUp);
+
+            popUpbox.text.text = message;
+
+            var rect = go.transform as RectTransform;
+
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            rect.anchoredPosition3D = Vector3.zero;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.localScale = Vector3.one;
+            popUpGO = go;
+            return popUpbox;
+        }
+
+        private void RemovePopUp(){
+            GameObject.Destroy(popUpGO);
+            popUpGO = null;
+        }
+
 
         public GameObject RemovePanel(string name, Callback afterRemove){
             if (!panelDict.ContainsKey(name)) return null;

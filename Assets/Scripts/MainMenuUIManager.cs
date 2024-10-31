@@ -4,6 +4,7 @@ using UnityEngine;
 using SFramework;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviour
 {
@@ -31,6 +32,14 @@ public class MainMenuUIManager : MonoBehaviour
         guiMgr.RemovePanel("TitleMenu");
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
         guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
+        foreach (var skin in gameManager.skinList.skinList){
+            var btnScript = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent)
+                                .GetComponent<SkinBtn>();
+            btnScript.skin = skin;
+            guiMgr.OnClick(btnScript.btn, btnScript.OnClick);
+            guiMgr.OnClick(btnScript.btn, OnPurchaseSkinBtn);
+            btnScript.rawImage.texture = skin.thumbnail;
+        }
         mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
         guiMgr.OnClick(mainMenuComponents.GetSettingsBtn(), OnSettingsBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddMaxEnergyBtn(), OnAddMaxEnergyBtn);
@@ -52,6 +61,12 @@ public class MainMenuUIManager : MonoBehaviour
         mainMenuComponents.GetGameLevelTxt().text = "Level: " + gameManager.gameLevel;
     }
 
+    private void OnPurchaseSkinBtn(){
+        guiMgr.GetPanel("MainMenu")
+        .GetComponent<MainMenuComponents>()
+        .GetCoinCntTxt().text = gameManager.coinCount.ToString();
+    }
+
     private void OnExitBtn(){
         gameManager.SaveGame();
         Application.Quit();
@@ -64,7 +79,8 @@ public class MainMenuUIManager : MonoBehaviour
     }
 
     private void OnSettingsBtn(){
-        var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top).GetComponent<SettingsPanelComponents>();
+        var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top)
+                                        .GetComponent<SettingsPanelComponents>();
         guiMgr.OnClick(settingsPanelComponents.GetExitGameBtn(), OnExitBtn);
         guiMgr.OnClick(settingsPanelComponents.GetXBtn(), OnSettingsXBtn);
         settingsPanelComponents.OnAddCoinBtn(OnAddCoinBtn);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SFramework;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     bool gameOver, reachedNextLevel;
     [SerializeField]
     Transform lavaTrans, miniMapCamTrans;
+
 
     [SerializeField]
     float forceMul, maxExplodeForce, 
@@ -64,6 +66,17 @@ public class PlayerMovement : MonoBehaviour
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
+        var skin = GameManager.instance.currentSkin;
+        if (skin.haveTrail){
+            var trailRenderer = GetComponent<TrailRenderer>();
+            trailRenderer.enabled = true;
+            trailRenderer.startColor = skin.trailColor;
+            trailRenderer.endColor = new Color(skin.trailColor.r, skin.trailColor.g, skin.trailColor.b, 0f);
+        }
+        
+        var renderer = GetComponent<SpriteRenderer>();
+        renderer.sprite = skin.sprite;
+        renderer.color = skin.spriteColor;
         gameOverPanel.SetActive(false);
         foreach (var Go in dots){
             Go.SetActive(false);
