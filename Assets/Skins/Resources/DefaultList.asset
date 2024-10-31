@@ -15,3 +15,4 @@ MonoBehaviour:
   skinList:
   - {fileID: 11400000, guid: 10a935d2fe41248e38431e46babfe31a, type: 2}
   - {fileID: 11400000, guid: 325e47294a1e7421b826778ba9819197, type: 2}
+  - {fileID: 11400000, guid: 44d24aaba016b443caed2ffd6f5f6dc4, type: 2}

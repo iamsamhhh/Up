@@ -37,6 +37,7 @@ public class MainMenuUIManager : MonoBehaviour
                                 .GetComponent<SkinBtn>();
             btnScript.skin = skin;
             guiMgr.OnClick(btnScript.btn, btnScript.OnClick);
+            guiMgr.OnClick(btnScript.btn, OnPurchaseSkinBtn);
             btnScript.rawImage.texture = skin.thumbnail;
         }
         mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
@@ -58,6 +59,12 @@ public class MainMenuUIManager : MonoBehaviour
         mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(gameManager.energyWasteLv).ToString();
         
         mainMenuComponents.GetGameLevelTxt().text = "Level: " + gameManager.gameLevel;
+    }
+
+    private void OnPurchaseSkinBtn(){
+        guiMgr.GetPanel("MainMenu")
+        .GetComponent<MainMenuComponents>()
+        .GetCoinCntTxt().text = gameManager.coinCount.ToString();
     }
 
     private void OnExitBtn(){

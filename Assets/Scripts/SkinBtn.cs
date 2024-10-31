@@ -9,6 +9,15 @@ public class SkinBtn : MonoBehaviour
     public TMP_Text costText;
     public RawImage rawImage;
     public void OnClick(){
-        GameManager.instance.currentSkin = skin;
+        if (skin.bought){
+            GameManager.instance.currentSkin = skin;
+        }
+        else{
+            if (GameManager.instance.coinCount >= skin.cost){
+                GameManager.instance.coinCount -= skin.cost;
+                GameManager.instance.currentSkin = skin;
+                skin.bought = true;
+            }
+        }
     }
 }
