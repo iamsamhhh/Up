@@ -2643,16 +2643,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lavaTrans: {fileID: 1693575839}
   miniMapCamTrans: {fileID: 534600125}
-  forceMul: 40
+  playerSetting: {fileID: 11400000, guid: b762168b4bb004a2d997d5f9eca377de, type: 2}
+  energyForce: 0
   maxExplodeForce: 30
-  minEnergyNeed: 5
+  minEnergyNeeded: 0
   energyNeedMul: 0.5
-  initialEnergyRefuel: 30
-  energyNeedNormal: 1
-  energyNeedSlowmoMul: 5
-  initialEnergy: 100
+  initialFuelPower: 0
+  energyBurnOff: 0
+  energyBurnOffSlowMo: 0
+  initialMaxEnergy: 0
   energyRemaining: 0
-  lavaDistance: 100
+  maxLavaDistance: 0
   lavaSpeed: 3
   maxEnergyIncreasePerLv: 10
   energyRefuelIncreasePerLv: 3
