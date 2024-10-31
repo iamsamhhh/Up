@@ -27,23 +27,12 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
             }
         }
         
-
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
 	    Application.targetFrameRate = 120;
-        // SaveMgr.instance.isBuild = true;
+
         cameFromGame = false;
         gamePaused = false;
 
-        // coinCount = PlayerPrefs.GetInt("CoinCount", 0);
-
-        // maxEnergyLv = PlayerPrefs.GetInt("MaxEnergyLv", 0);
-
-        // energyRefuelLv = PlayerPrefs.GetInt("EnergyRefuelLv", 0);
-
-        // energyWasteLv = PlayerPrefs.GetInt("EnergyWasteLv", 0);
-
-        // gameLevel = PlayerPrefs.GetInt("GameLevel", 1);
-        
         coinCount = SaveMgr.instance.LoadInt("GoldCount");
         // Debug.Log("Getting Coin count");
         if (coinCount == 0) {
@@ -100,12 +89,6 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
         skinList.skinList[0].bought = true;
         currentSkin = skinList.skinList[0];
-        // PlayerPrefs.SetInt("CoinCount", coinCount);
-        // PlayerPrefs.SetInt("MaxEnergyLv", maxEnergyLv);
-        // PlayerPrefs.SetInt("EnergyRefuelLv", energyRefuelLv);
-        // PlayerPrefs.SetInt("EnergyWasteLv", energyWasteLv);
-        // PlayerPrefs.SetInt("GameLevel", gameLevel);
-        // PlayerPrefs.Save();
         SaveMgr.instance.Save(coinCount, "GoldCount");
         SaveMgr.instance.Save(maxEnergyLv, "MaxEnergyLv");
         SaveMgr.instance.Save(energyRefuelLv, "EnergyRefuelLv");
