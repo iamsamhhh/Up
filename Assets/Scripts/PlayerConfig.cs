@@ -1,8 +1,8 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new playerSetting", menuName = "Settings/Player setting")]
-public class PlayerSetting : ScriptableObject{
+[CreateAssetMenu(fileName = "new player config", menuName = "Configuration/Player config")]
+public class PlayerConfig : ScriptableObject{
     [Tooltip("The force can be generated per energy")]
     public float energyForce;
     [Tooltip("The minimum energy needed per jump")]
@@ -25,5 +25,11 @@ public class PlayerSetting : ScriptableObject{
     public float lavaSpeed;
     [Tooltip("Max energy increase per level of max energy")]
     public float maxEnergyIncreasePerLv;
+    [Tooltip("Fuel power increase per level of fuel power")]
+    public float fuelPowerIncreasePerLv;
+    [Tooltip("Energy durability increase per level of energy durability")]
+    public float energyDuribilityIncreasePerLv;
+    [Tooltip("How many times slower when slo mo")]
+    public float timeSlowAmount;
 
 }

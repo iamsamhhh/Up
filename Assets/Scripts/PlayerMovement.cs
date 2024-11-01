@@ -7,32 +7,28 @@ public class PlayerMovement : MonoBehaviour
 {
     Vector2 cursorReleasePos;
     Rigidbody2D rb;
-    bool gameOver, reachedNextLevel;
+    bool gameOver;
     [SerializeField]
     Transform lavaTrans, miniMapCamTrans;
 
     [SerializeField]
-    PlayerSetting playerSetting;
+    PlayerConfig playerConfig;
 
-
+    // Configs
     private float energyForce, maxExplodeForce,
     minEnergyNeeded, energyNeedMul,
     initialFuelPower, energyBurnOff,
     energyBurnOffSlowMo, initialMaxEnergy, 
-    maxLavaDistance, lavaSpeed, maxEnergyIncreasePerLv;
+    maxLavaDistance, lavaSpeed, maxEnergyIncreasePerLv,
+    timeSlowAmount, fuelPowerIncreasePerLv,
+    energyDurabilityIncreasePerLv;
 
     private float energyRemaining;
-
-    [SerializeField]
-    float energyRefuelIncreasePerLv, energyWasteReducePercentagePerLv;
 
     float energyWastePercentage, maxEnergy, energyRefuel;
 
     [SerializeField]
     EnergyGenerator generator;
-
-    [SerializeField][Range(0, 1)]
-    float timeScale;
 
     [SerializeField]
     Image slider, heightSlider;
@@ -52,19 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
-        energyForce = playerSetting.energyForce;
-        maxExplodeForce = playerSetting.maxExplodeForce;
-        minEnergyNeeded = playerSetting.minEnergyNeeded;
-        energyNeedMul = playerSetting.energyNeedMul;
-        initialFuelPower = playerSetting.initialFuelPower;
-        energyBurnOff = playerSetting.energyBurnOff;
-        energyBurnOffSlowMo = playerSetting.energyBurnOffSlowMo;
-        lavaSpeed = playerSetting.lavaSpeed;
-        maxLavaDistance = playerSetting.maxLavaDistance;
-        initialMaxEnergy = playerSetting.initialMaxEnergy;
-        maxEnergyIncreasePerLv = playerSetting.maxEnergyIncreasePerLv;
+        SetUpConfiguration();
 
-        reachedNextLevel = false;
         gameOver = false;
         goldCount = 0;
         alreadyPaused = false;
@@ -72,8 +57,8 @@ public class PlayerMovement : MonoBehaviour
         currentLevel = levelWhenGameStart;
         maxEnergy = GameManager.instance.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
         energyRemaining = maxEnergy;
-        energyRefuel = initialFuelPower + GameManager.instance.energyRefuelLv*energyRefuelIncreasePerLv;
-        energyWastePercentage = (100-GameManager.instance.energyWasteLv*energyWasteReducePercentagePerLv)/100;
+        energyRefuel = initialFuelPower + GameManager.instance.energyRefuelLv*fuelPowerIncreasePerLv;
+        energyWastePercentage = (100-GameManager.instance.energyWasteLv*energyDurabilityIncreasePerLv)/100;
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
@@ -142,8 +127,8 @@ public class PlayerMovement : MonoBehaviour
             energyRemaining = maxEnergy;
         }
         if(Input.GetMouseButtonDown(0)){
-            Time.timeScale = timeScale;
-            Time.fixedDeltaTime = 0.02f * timeScale;
+            Time.timeScale = 1/timeSlowAmount;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
             foreach (var dot in dots){
                 dot.SetActive(true);
             }
@@ -161,6 +146,24 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    void SetUpConfiguration(){
+        energyForce = playerConfig.energyForce;
+        maxExplodeForce = playerConfig.maxExplodeForce;
+        minEnergyNeeded = playerConfig.minEnergyNeeded;
+        energyNeedMul = playerConfig.energyNeedMul;
+        initialFuelPower = playerConfig.initialFuelPower;
+        energyBurnOff = playerConfig.energyBurnOff;
+        energyBurnOffSlowMo = playerConfig.energyBurnOffSlowMo;
+        lavaSpeed = playerConfig.lavaSpeed;
+        maxLavaDistance = playerConfig.maxLavaDistance;
+        initialMaxEnergy = playerConfig.initialMaxEnergy;
+        maxEnergyIncreasePerLv = playerConfig.maxEnergyIncreasePerLv;
+        timeSlowAmount = playerConfig.timeSlowAmount;
+        fuelPowerIncreasePerLv = playerConfig.fuelPowerIncreasePerLv;
+        energyDurabilityIncreasePerLv = playerConfig.energyDuribilityIncreasePerLv;
+    }
+
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
