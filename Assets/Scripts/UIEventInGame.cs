@@ -12,9 +12,11 @@ public class UIEventInGame : MonoBehaviour
             return GameManager.instance;
         }
     }
+    
     public void ResetScene(){
         LevelMgr.instance.ResetScene();
     }
+
     public void OnMenuBtn(){
         gameManager.cameFromGame = true;
         LevelMgr.instance.LoadScene("MainMenu");

@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float energyRemaining;
 
-    float energyWastePercentage, maxEnergy, energyRefuel;
+    private float energyWastePercentage, maxEnergy, energyRefuel;
 
     [SerializeField]
     EnergyGenerator generator;
@@ -39,30 +39,34 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     TMPro.TMP_Text heightText, goldCountText;
 
-    int goldCount, levelWhenGameStart, currentLevel;
+    int coinCount, levelWhenGameStart, currentLevel;
 
     bool alreadyPaused;
     
     [SerializeField]    
     List<GameObject> dots;
 
+    GameManager gameManager {
+        get {return GameManager.instance;}
+    }
+
     // Start is called before the first frame update
     void Start(){
         SetUpConfiguration();
 
         gameOver = false;
-        goldCount = 0;
+        coinCount = 0;
         alreadyPaused = false;
-        levelWhenGameStart = GameManager.instance.gameLevel;
+        levelWhenGameStart = gameManager.gameLevel;
         currentLevel = levelWhenGameStart;
-        maxEnergy = GameManager.instance.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
+        maxEnergy = gameManager.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
         energyRemaining = maxEnergy;
-        energyRefuel = initialFuelPower + GameManager.instance.energyRefuelLv*fuelPowerIncreasePerLv;
-        energyWastePercentage = (100-GameManager.instance.energyWasteLv*energyDurabilityIncreasePerLv)/100;
+        energyRefuel = initialFuelPower + gameManager.fuelPowerLv*fuelPowerIncreasePerLv;
+        energyWastePercentage = (100-gameManager.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
-        var skin = GameManager.instance.currentSkin;
+        var skin = gameManager.currentSkin;
         if (skin.haveTrail){
             var trailRenderer = GetComponent<TrailRenderer>();
             trailRenderer.enabled = true;
@@ -84,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     {
         miniMapCamTrans.position = new Vector3(transform.position.x, transform.position.y, miniMapCamTrans.position.z);
         if (gameOver) return;
-        if (GameManager.instance.gamePaused){
+        if (gameManager.gamePaused){
             if (!alreadyPaused){
                 alreadyPaused = true;
             }
@@ -99,17 +103,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         UpdateLava();
-
-        energyRemaining -= Time.deltaTime/(1/energyBurnOff);
+        energyRemaining -= energyWastePercentage*Time.deltaTime/(1/energyBurnOff);
         UpdateHeightIndicator();
-        GameManager.instance.inGameCoinCnt = goldCount;
+        gameManager.inGameCoinCnt = coinCount;
         slider.fillAmount = energyRemaining/maxEnergy;
 
         // gameover
         if (transform.position.y <= lavaTrans.position.y + 15.5 & !gameOver){
             gameOverPanel.SetActive(true);
-            GameManager.instance.coinCount += goldCount*GameManager.instance.gameLevel;
-            GameManager.instance.SaveGame();
+            gameManager.coinCount += coinCount*gameManager.gameLevel;
+            gameManager.SaveGame();
             // rb.bodyType = RigidbodyType2D.Static;
             Time.timeScale = 0;
             gameOver = true;
@@ -135,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if(Input.GetMouseButton(0)){
             OnCursorPress();
-            energyRemaining -= Time.deltaTime/(1/(energyBurnOff*energyBurnOffSlowMo));
+            energyRemaining -= energyWastePercentage*Time.deltaTime/(1/(energyBurnOff*energyBurnOffSlowMo));
         }
         if(Input.GetMouseButtonUp(0)){
             OnCursorRelease();
@@ -191,7 +194,7 @@ public class PlayerMovement : MonoBehaviour
         if (currentLevel < level){
             var levelDiff = level - currentLevel;
             for (var i = 0; i < levelDiff; i++){
-                GameManager.instance.gameLevel++;
+                gameManager.gameLevel++;
                 generator.LevelUp();
                 currentLevel++;
             }
@@ -255,9 +258,9 @@ public class PlayerMovement : MonoBehaviour
         // Debug.Log("On trigger enter");
         if (other.gameObject.tag == "Coin"){
             energyRemaining += energyRefuel/2;
-            goldCount++;
+            coinCount++;
             generator.RemoveObject(other.transform, EObjectType.Coin);
-            goldCountText.text = goldCount.ToString();
+            goldCountText.text = coinCount.ToString();
         }
     }
 }
