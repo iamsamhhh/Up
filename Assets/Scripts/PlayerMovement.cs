@@ -73,6 +73,9 @@ public class PlayerMovement : MonoBehaviour
             trailRenderer.startColor = skin.trailColor;
             trailRenderer.endColor = new Color(skin.trailColor.r, skin.trailColor.g, skin.trailColor.b, 0f);
         }
+        else{
+            GetComponent<TrailRenderer>().enabled = false;
+        }
         
         var renderer = GetComponent<SpriteRenderer>();
         renderer.sprite = skin.sprite;

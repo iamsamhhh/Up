@@ -24,4 +24,5 @@ MonoBehaviour:
   lavaSpeed: 3
   maxEnergyIncreasePerLv: 30
   fuelPowerIncreasePerLv: 3
+  energyDuribilityIncreasePerLv: 2
   timeSlowAmount: 10
