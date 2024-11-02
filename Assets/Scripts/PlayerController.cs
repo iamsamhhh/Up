@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     Vector2 cursorReleasePos;
     Rigidbody2D rb;
@@ -53,37 +53,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         SetUpConfiguration();
-
-        gameOver = false;
-        coinCount = 0;
-        alreadyPaused = false;
-        levelWhenGameStart = gameManager.gameLevel;
-        currentLevel = levelWhenGameStart;
-        maxEnergy = gameManager.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
-        energyRemaining = maxEnergy;
-        energyRefuel = initialFuelPower + gameManager.fuelPowerLv*fuelPowerIncreasePerLv;
-        energyWastePercentage = (100-gameManager.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
-        Time.timeScale = 1;
-        Time.fixedDeltaTime = 0.02f;
-        rb = GetComponent<Rigidbody2D>();
-        var skin = gameManager.currentSkin;
-        if (skin.haveTrail){
-            var trailRenderer = GetComponent<TrailRenderer>();
-            trailRenderer.enabled = true;
-            trailRenderer.startColor = skin.trailColor;
-            trailRenderer.endColor = new Color(skin.trailColor.r, skin.trailColor.g, skin.trailColor.b, 0f);
-        }
-        else{
-            GetComponent<TrailRenderer>().enabled = false;
-        }
+        SetUpVariables();
         
-        var renderer = GetComponent<SpriteRenderer>();
-        renderer.sprite = skin.sprite;
-        renderer.color = skin.spriteColor;
-        gameOverPanel.SetActive(false);
-        foreach (var Go in dots){
-            Go.SetActive(false);
-        }
     }
 
     // Update is called once per frame
@@ -150,6 +121,39 @@ public class PlayerMovement : MonoBehaviour
             foreach (var dot in dots){
                 dot.SetActive(false);
             }
+        }
+    }
+
+    void SetUpVariables(){
+        gameOver = false;
+        coinCount = 0;
+        alreadyPaused = false;
+        levelWhenGameStart = gameManager.gameLevel;
+        currentLevel = levelWhenGameStart;
+        maxEnergy = gameManager.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
+        energyRemaining = maxEnergy;
+        energyRefuel = initialFuelPower + gameManager.fuelPowerLv*fuelPowerIncreasePerLv;
+        energyWastePercentage = (100-gameManager.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
+        Time.timeScale = 1;
+        Time.fixedDeltaTime = 0.02f;
+        rb = GetComponent<Rigidbody2D>();
+        var skin = gameManager.currentSkin;
+        if (skin.haveTrail){
+            var trailRenderer = GetComponent<TrailRenderer>();
+            trailRenderer.enabled = true;
+            trailRenderer.startColor = skin.trailColor;
+            trailRenderer.endColor = new Color(skin.trailColor.r, skin.trailColor.g, skin.trailColor.b, 0f);
+        }
+        else{
+            GetComponent<TrailRenderer>().enabled = false;
+        }
+        
+        var renderer = GetComponent<SpriteRenderer>();
+        renderer.sprite = skin.sprite;
+        renderer.color = skin.spriteColor;
+        gameOverPanel.SetActive(false);
+        foreach (var Go in dots){
+            Go.SetActive(false);
         }
     }
 
