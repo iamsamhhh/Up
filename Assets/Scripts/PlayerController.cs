@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
     bool gameOver;
     [SerializeField]
     Transform lavaTrans, miniMapCamTrans;
+    [SerializeField]
+    PostProcessVolume ppvNormal;
 
     [SerializeField]
     PlayerConfig playerConfig;
@@ -106,6 +110,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(0)){
             Time.timeScale = 1/timeSlowAmount;
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            StopAllCoroutines();
             foreach (var dot in dots){
                 dot.SetActive(true);
             }
@@ -113,6 +118,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButton(0)){
             OnCursorPress();
             energyRemaining -= energyWastePercentage*Time.deltaTime/(1/(energyBurnOff*energyBurnOffSlowMo));
+            ppvNormal.weight = Mathf.Lerp(ppvNormal.weight, 0, (1/playerConfig.sloMoEffectFadeInTime)*(Time.deltaTime/Time.timeScale));
         }
         if(Input.GetMouseButtonUp(0)){
             OnCursorRelease();
@@ -121,6 +127,7 @@ public class PlayerController : MonoBehaviour
             foreach (var dot in dots){
                 dot.SetActive(false);
             }
+            StartCoroutine(ReversePPV());
         }
     }
 
@@ -155,6 +162,7 @@ public class PlayerController : MonoBehaviour
         foreach (var Go in dots){
             Go.SetActive(false);
         }
+        ppvNormal.weight = 1f;
     }
 
     void SetUpConfiguration(){
@@ -243,6 +251,12 @@ public class PlayerController : MonoBehaviour
         // Debug.Log("Cursor released at : " + cursorReleasePos);
         energyRemaining -= energyNeed*energyWastePercentage;
         cursorReleasePos = Vector2.zero;
+    }
+    IEnumerator ReversePPV(){
+        while (ppvNormal.weight < 1){
+            ppvNormal.weight = Mathf.Lerp(ppvNormal.weight, 1, (1/playerConfig.sloMoEffectFadeInTime)*(Time.deltaTime/Time.timeScale));
+            yield return null;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other) {

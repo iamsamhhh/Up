@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 408446898}
   - component: {fileID: 408446897}
   m_Layer: 6
-  m_Name: PostProcess
+  m_Name: PostProcessNormal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -600,7 +600,7 @@ MonoBehaviour:
   isGlobal: 1
   blendDistance: 0
   weight: 1
-  priority: 0
+  priority: 1
 --- !u!4 &408446898
 Transform:
   m_ObjectHideFlags: 0
@@ -1419,6 +1419,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 408446898}
+  - {fileID: 799504977}
   - {fileID: 1382716780}
   - {fileID: 1081712988}
   - {fileID: 1527538299}
@@ -1898,6 +1899,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716062106}
   m_CullTransparentMesh: 1
+--- !u!1 &799504976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 799504977}
+  - component: {fileID: 799504978}
+  m_Layer: 6
+  m_Name: PostProcessSloMo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &799504977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799504976}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 680085745}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &799504978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799504976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 5fa51d5ae600a4366b869d88a2abd664, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 0
 --- !u!1 &892381324
 GameObject:
   m_ObjectHideFlags: 0
@@ -2643,8 +2693,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lavaTrans: {fileID: 1693575839}
   miniMapCamTrans: {fileID: 534600125}
+  ppvNormal: {fileID: 408446897}
   playerConfig: {fileID: 11400000, guid: b762168b4bb004a2d997d5f9eca377de, type: 2}
-  energyWasteReducePercentagePerLv: 1
   generator: {fileID: 1382716779}
   slider: {fileID: 1997628609}
   heightSlider: {fileID: 2100724052}

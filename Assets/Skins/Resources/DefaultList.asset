@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: DefaultList
   m_EditorClassIdentifier: 
   skinList:
+  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
+  - {fileID: 11400000, guid: b643ff67c7f58448a96f08d7a2918a65, type: 2}
+  - {fileID: 11400000, guid: c8966e1d2eae9428ea01ee38fc576536, type: 2}
+  - {fileID: 11400000, guid: 49dea713b57204239b6274753898695c, type: 2}
   - {fileID: 11400000, guid: 10a935d2fe41248e38431e46babfe31a, type: 2}
+  - {fileID: 11400000, guid: b89434ed8ef9a4f61a467c32af11713d, type: 2}
   - {fileID: 11400000, guid: 325e47294a1e7421b826778ba9819197, type: 2}
   - {fileID: 11400000, guid: 44d24aaba016b443caed2ffd6f5f6dc4, type: 2}

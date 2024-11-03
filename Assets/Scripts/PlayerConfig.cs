@@ -31,5 +31,7 @@ public class PlayerConfig : ScriptableObject{
     public float energyDuribilityIncreasePerLv;
     [Tooltip("How many times slower when slo mo")]
     public float timeSlowAmount;
+    [Tooltip("time to fade in slo mo effect")]
+    public float sloMoEffectFadeInTime;
 
 }

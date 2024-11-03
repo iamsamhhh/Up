@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c2c1c713fcce4af5bca6133b40eeb53, type: 3}
   m_Name: Blue
   m_EditorClassIdentifier: 
-  id: BlueT
-  bought: 1
-  cost: 200
-  haveTrail: 1
+  id: Blue
+  bought: 0
+  cost: 10
+  haveTrail: 0
   trailColor: {r: 0.03003788, g: 0, b: 1, a: 1}
   sprite: {fileID: -2413806693520163455, guid: 6e1ed5e78f92749ab9742059e1d2481a, type: 3}
   spriteColor: {r: 0.03529412, g: 0, b: 0.9843137, a: 1}
