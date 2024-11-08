@@ -26,3 +26,4 @@ MonoBehaviour:
   fuelPowerIncreasePerLv: 3
   energyDuribilityIncreasePerLv: 2
   timeSlowAmount: 10
+  sloMoEffectFadeInTime: 0.2
