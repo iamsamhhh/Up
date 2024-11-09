@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     PlayerConfig playerConfig;
 
+    [SerializeField]
+    AudioSource audioSource;
+
     // Configs
     private float energyForce, maxExplodeForce,
     minEnergyNeeded, energyNeedMul,
@@ -58,7 +61,6 @@ public class PlayerController : MonoBehaviour
     void Start(){
         SetUpConfiguration();
         SetUpVariables();
-        
     }
 
     // Update is called once per frame
@@ -265,6 +267,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
             generator.RemoveObject(other.transform, EObjectType.Energy);
             energyRemaining += energyRefuel;
+            audioSource.Play();
         }
         if (other.gameObject.tag == "Bomb"){
             var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));

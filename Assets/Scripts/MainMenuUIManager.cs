@@ -10,6 +10,8 @@ public class MainMenuUIManager : MonoBehaviour
 {
     private GUIMgr guiMgr;
     private GameManager gameManager;
+    [SerializeField]
+    BGMManager bgmManager;
     private void Awake() {
         guiMgr = GUIMgr.instance;
         gameManager = GameManager.instance;
@@ -69,6 +71,7 @@ public class MainMenuUIManager : MonoBehaviour
     private void OnStartGameBtn(){
         guiMgr.RemoveAllPanel();
         gameManager.SaveGame();
+        bgmManager.Play();
         LevelMgr.instance.LoadScene("GameScene");
     }
 
