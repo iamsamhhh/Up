@@ -28,6 +28,9 @@ public class SkinBtn : MonoBehaviour
         GameManager.instance.coinCount -= skin.cost;
         GameManager.instance.currentSkin = skin;
         skin.bought = true;
+        GUIMgr.instance.GetPanel("MainMenu")
+        .GetComponent<MainMenuComponents>()
+        .GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
     }
 
     private void onCancelBtn(){}

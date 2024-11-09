@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PurpleT
   m_EditorClassIdentifier: 
   id: PurpleT
-  bought: 1
-  cost: 0
+  bought: 0
+  cost: 100
   haveTrail: 1
   trailColor: {r: 1, g: 0.27058825, b: 0.9098039, a: 1}
   sprite: {fileID: -2413806693520163455, guid: 6e1ed5e78f92749ab9742059e1d2481a, type: 3}
