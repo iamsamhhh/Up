@@ -85,17 +85,11 @@ public class PlayerController : MonoBehaviour
         UpdateLava();
         energyRemaining -= energyWastePercentage*Time.deltaTime/(1/energyBurnOff);
         UpdateHeightIndicator();
-        gameManager.inGameCoinCnt = coinCount;
         slider.fillAmount = energyRemaining/maxEnergy;
 
         // gameover
         if (transform.position.y <= lavaTrans.position.y + 15.5 & !gameOver){
-            gameOverPanel.SetActive(true);
-            gameManager.coinCount += coinCount*gameManager.gameLevel;
-            gameManager.SaveGame();
-            // rb.bodyType = RigidbodyType2D.Static;
-            Time.timeScale = 0;
-            gameOver = true;
+            GameOver();
             return;
         }
 
@@ -131,6 +125,21 @@ public class PlayerController : MonoBehaviour
             }
             StartCoroutine(ReversePPV());
         }
+    }
+
+    void GameOver(){
+        SaveGame();
+        // rb.bodyType = RigidbodyType2D.Static;
+        Time.timeScale = 0;
+        gameOver = true;
+    }
+
+    public void SaveGame(){
+        gameOverPanel.SetActive(true);
+        gameManager.coinCount += coinCount*gameManager.gameLevel;
+        var currentScore = (int)(transform.position.y+(levelWhenGameStart-1)*1000);
+        gameManager.highestScore = gameManager.highestScore > currentScore ? gameManager.highestScore : currentScore;
+        gameManager.SaveGame();
     }
 
     void SetUpVariables(){

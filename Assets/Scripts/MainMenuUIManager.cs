@@ -6,7 +6,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
-public class MainMenuUIManager : MonoBehaviour
+public class MainMenuUIManager : MonoBehaviourSimplify
 {
     private GUIMgr guiMgr;
     private GameManager gameManager;
@@ -42,11 +42,15 @@ public class MainMenuUIManager : MonoBehaviour
             btnScript.rawImage.texture = skin.thumbnail;
             btnScript.costText.text = skin.cost.ToString();
         }
-        mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
+        
         guiMgr.OnClick(mainMenuComponents.GetSettingsBtn(), OnSettingsBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddMaxEnergyBtn(), OnAddMaxEnergyBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddEnergyRefuelBtn(), OnAddEnergyRefuelBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddEnergyWasteBtn(), OnAddEnergyWasteBtn);
+
+        mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
+
+        mainMenuComponents.GetHighestScoreTxt().text = "Highest score: " + GameManager.instance.highestScore.ToString();
 
         // Set max enery level texts
         mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + gameManager.maxEnergyLv.ToString();

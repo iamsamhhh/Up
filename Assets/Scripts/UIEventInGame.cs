@@ -7,6 +7,8 @@ public class UIEventInGame : MonoBehaviour
 {
     [SerializeField]
     GameObject pausePanel;
+    [SerializeField]
+    PlayerController player;
     GameManager gameManager {
         get{
             return GameManager.instance;
@@ -23,8 +25,7 @@ public class UIEventInGame : MonoBehaviour
     }
 
     public void OnPauseMenuBtn(){
-        gameManager.coinCount += gameManager.inGameCoinCnt*gameManager.gameLevel;
-        gameManager.SaveGame();
+        player.SaveGame();
         gameManager.cameFromGame = true;
         gameManager.gamePaused = false;
         LevelMgr.instance.LoadScene("MainMenu");
