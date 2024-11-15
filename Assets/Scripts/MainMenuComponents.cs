@@ -12,7 +12,8 @@ public class MainMenuComponents : MonoBehaviour
     [SerializeField]
     TMP_Text maxEnergyLvTxt, energyRefuelLvTxt, energyWasteLvTxt,
         coinCntTxt, gameLevelTxt,
-        coin4MaxEnergyTxt, coin4EnergyRefuelTxt, coin4EnergyWasteTxt;
+        coin4MaxEnergyTxt, coin4EnergyRefuelTxt, coin4EnergyWasteTxt, 
+        highestScoreTxt;
     public Transform skinContent;
     public Button GetAddMaxEnergyBtn(){return addMaxEnergyBtn;}
     public Button GetAddEnergyRefuelBtn(){return addEnergyRefuelBtn;}
@@ -28,4 +29,5 @@ public class MainMenuComponents : MonoBehaviour
     public TMP_Text GetCoin4EnergyRefuelTxt() { return coin4EnergyRefuelTxt;}
     public TMP_Text GetCoin4EnergyWasteTxt() { return coin4EnergyWasteTxt;}
     public TMP_Text GetGameLevelTxt() { return gameLevelTxt;}
+    public TMP_Text GetHighestScoreTxt() { return highestScoreTxt;}
 }

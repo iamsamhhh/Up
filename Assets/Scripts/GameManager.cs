@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
-    public int coinCount, maxEnergyLv, fuelPowerLv, energyDurabilityLv, gameLevel, inGameCoinCnt;
+    public int coinCount, maxEnergyLv, fuelPowerLv, energyDurabilityLv, gameLevel, highestScore;
 
     public bool cameFromGame, gamePaused;
     public Skin currentSkin;
@@ -55,6 +55,10 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
             gameLevel = 1;
             SaveMgr.instance.Save(gameLevel, "GameLevel");
         }
+        highestScore = SaveMgr.instance.LoadInt("HighestScore");
+        if (highestScore == 0) {
+            SaveMgr.instance.Save(0, "HighestScore");
+        }
     }
     public void SaveGame(){
         SaveMgr.instance.Save(coinCount, "GoldCount");
@@ -62,6 +66,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         SaveMgr.instance.Save(fuelPowerLv, "EnergyRefuelLv");
         SaveMgr.instance.Save(energyDurabilityLv, "EnergyWasteLv");
         SaveMgr.instance.Save(gameLevel, "GameLevel");
+        SaveMgr.instance.Save(highestScore, "HighestScore");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
 
         foreach (var skin in skinList.skinList) {
@@ -84,6 +89,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         fuelPowerLv = 0;
         energyDurabilityLv = 0;
         gameLevel = 1;
+        highestScore = 0;
         foreach (var skin in skinList.skinList){
             skin.bought = false;
         }
@@ -94,6 +100,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         SaveMgr.instance.Save(fuelPowerLv, "EnergyRefuelLv");
         SaveMgr.instance.Save(energyDurabilityLv, "EnergyWasteLv");
         SaveMgr.instance.Save(gameLevel, "GameLevel");
+        SaveMgr.instance.Save(highestScore, "HighestScore");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
         foreach (var skin in skinList.skinList) {
             skinDict.Add(skin.id, skin.bought);
