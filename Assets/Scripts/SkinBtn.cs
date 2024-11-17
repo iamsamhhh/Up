@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using SFramework;
+using MyFramework;
 using System;
 public class SkinBtn : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class SkinBtn : MonoBehaviour
         }
         else{
             if (GameManager.instance.coinCount >= skin.cost){
-                GUIMgr.instance.AddPopUp(
+                GUIManager.instance.AddPopUp(
                     "Are you sure you want to buy this skin that cost " + skin.cost + " Coin?",
                     OnConfirmBtn,
                     onCancelBtn
@@ -28,7 +28,7 @@ public class SkinBtn : MonoBehaviour
         GameManager.instance.coinCount -= skin.cost;
         GameManager.instance.currentSkin = skin;
         skin.bought = true;
-        GUIMgr.instance.GetPanel("MainMenu")
+        GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
         .GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
     }

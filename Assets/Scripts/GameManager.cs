@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using SFramework;
+using MyFramework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,9 +14,9 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     private void Awake() {
         skinList = Resources.Load<SkinList>("DefaultList");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
-        var currentSkinId = SaveMgr.instance.LoadString("CurrentSkinID");
+        var currentSkinId = SaveManager.LoadString("CurrentSkinID");
         currentSkin = skinList.skinList[0];
-        if (SaveMgr.instance.LoadObject("SkinAvailibility", skinDict)){
+        if (SaveManager.LoadObject("SkinAvailibility", skinDict)){
             foreach (var skin in skinList.skinList){
                 if (skinDict.ContainsKey(skin.id))
                     skin.bought = skinDict[skin.id];
@@ -33,47 +33,47 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         cameFromGame = false;
         gamePaused = false;
 
-        coinCount = SaveMgr.instance.LoadInt("GoldCount");
+        coinCount = SaveManager.LoadInt("GoldCount");
         // Debug.Log("Getting Coin count");
         if (coinCount == 0) {
-            SaveMgr.instance.Save(0, "GoldCount");
+            SaveManager.Save(0, "GoldCount");
         }
-        maxEnergyLv = SaveMgr.instance.LoadInt("MaxEnergyLv");
+        maxEnergyLv = SaveManager.LoadInt("MaxEnergyLv");
         if (maxEnergyLv == 0) {
-            SaveMgr.instance.Save(0, "MaxEnergyLv");
+            SaveManager.Save(0, "MaxEnergyLv");
         }
-        fuelPowerLv = SaveMgr.instance.LoadInt("EnergyRefuelLv");
+        fuelPowerLv = SaveManager.LoadInt("EnergyRefuelLv");
         if (fuelPowerLv == 0) {
-            SaveMgr.instance.Save(0, "EnergyRefuelLv");
+            SaveManager.Save(0, "EnergyRefuelLv");
         }
-        energyDurabilityLv = SaveMgr.instance.LoadInt("EnergyWasteLv");
+        energyDurabilityLv = SaveManager.LoadInt("EnergyWasteLv");
         if (energyDurabilityLv == 0) {
-            SaveMgr.instance.Save(0, "EnergyWasteLv");
+            SaveManager.Save(0, "EnergyWasteLv");
         }
-        gameLevel = SaveMgr.instance.LoadInt("GameLevel");
+        gameLevel = SaveManager.LoadInt("GameLevel");
         if (gameLevel == 0) {
             gameLevel = 1;
-            SaveMgr.instance.Save(gameLevel, "GameLevel");
+            SaveManager.Save(gameLevel, "GameLevel");
         }
-        highestScore = SaveMgr.instance.LoadInt("HighestScore");
+        highestScore = SaveManager.LoadInt("HighestScore");
         if (highestScore == 0) {
-            SaveMgr.instance.Save(0, "HighestScore");
+            SaveManager.Save(0, "HighestScore");
         }
     }
     public void SaveGame(){
-        SaveMgr.instance.Save(coinCount, "GoldCount");
-        SaveMgr.instance.Save(maxEnergyLv, "MaxEnergyLv");
-        SaveMgr.instance.Save(fuelPowerLv, "EnergyRefuelLv");
-        SaveMgr.instance.Save(energyDurabilityLv, "EnergyWasteLv");
-        SaveMgr.instance.Save(gameLevel, "GameLevel");
-        SaveMgr.instance.Save(highestScore, "HighestScore");
+        SaveManager.Save(coinCount, "GoldCount");
+        SaveManager.Save(maxEnergyLv, "MaxEnergyLv");
+        SaveManager.Save(fuelPowerLv, "EnergyRefuelLv");
+        SaveManager.Save(energyDurabilityLv, "EnergyWasteLv");
+        SaveManager.Save(gameLevel, "GameLevel");
+        SaveManager.Save(highestScore, "HighestScore");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
 
         foreach (var skin in skinList.skinList) {
             skinDict.Add(skin.id, skin.bought);
         }
-        SaveMgr.instance.Save(skinDict, "SkinAvailibility");
-        SaveMgr.instance.Save(currentSkin.id, "CurrentSkinID");
+        SaveManager.SaveObject(skinDict, "SkinAvailibility");
+        SaveManager.Save(currentSkin.id, "CurrentSkinID");
         // PlayerPrefs.SetInt("CoinCount", coinCount);
         // PlayerPrefs.SetInt("MaxEnergyLv", maxEnergyLv);
         // PlayerPrefs.SetInt("EnergyRefuelLv", energyRefuelLv);
@@ -95,17 +95,17 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
         skinList.skinList[0].bought = true;
         currentSkin = skinList.skinList[0];
-        SaveMgr.instance.Save(coinCount, "GoldCount");
-        SaveMgr.instance.Save(maxEnergyLv, "MaxEnergyLv");
-        SaveMgr.instance.Save(fuelPowerLv, "EnergyRefuelLv");
-        SaveMgr.instance.Save(energyDurabilityLv, "EnergyWasteLv");
-        SaveMgr.instance.Save(gameLevel, "GameLevel");
-        SaveMgr.instance.Save(highestScore, "HighestScore");
+        SaveManager.Save(coinCount, "GoldCount");
+        SaveManager.Save(maxEnergyLv, "MaxEnergyLv");
+        SaveManager.Save(fuelPowerLv, "EnergyRefuelLv");
+        SaveManager.Save(energyDurabilityLv, "EnergyWasteLv");
+        SaveManager.Save(gameLevel, "GameLevel");
+        SaveManager.Save(highestScore, "HighestScore");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
         foreach (var skin in skinList.skinList) {
             skinDict.Add(skin.id, skin.bought);
         }
-        SaveMgr.instance.Save(skinDict, "SkinAvailibility");
-        SaveMgr.instance.Save(currentSkin.id, "CurrentSkinID");
+        SaveManager.SaveObject(skinDict, "SkinAvailibility");
+        SaveManager.Save(currentSkin.id, "CurrentSkinID");
     }
 }

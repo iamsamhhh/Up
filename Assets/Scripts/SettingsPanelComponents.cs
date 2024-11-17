@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using SFramework;
+using MyFramework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,19 +17,19 @@ public class SettingsPanelComponents : MonoBehaviourSimplify
     public Button GetExitGameBtn(){return exitGameBtn;}
     public Button GetXBtn(){return xBtn;}
     public Button OnResetDataBtn(UnityEngine.Events.UnityAction action){
-        gUIMgr.OnClick(resetDataBtn, action);
+        guiManager.OnClick(resetDataBtn, action);
         return resetDataBtn;
     }
     public Button OnSaveGameBtn(UnityEngine.Events.UnityAction action){
-        gUIMgr.OnClick(saveGameBtn, action);
+        guiManager.OnClick(saveGameBtn, action);
         return saveGameBtn;
     }
     public Button OnAddCoinBtn(UnityEngine.Events.UnityAction action){
-        gUIMgr.OnClick(addCoinBtn, action);
+        guiManager.OnClick(addCoinBtn, action);
         return addCoinBtn;
     }
     public Button OnSetLevelBtn(UnityEngine.Events.UnityAction action){
-        gUIMgr.OnClick(setLevelBtn, action);
+        guiManager.OnClick(setLevelBtn, action);
         return setLevelBtn;
     }
 

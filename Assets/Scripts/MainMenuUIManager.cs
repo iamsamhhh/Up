@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SFramework;
+using MyFramework;
 using System;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviourSimplify
 {
-    private GUIMgr guiMgr;
+    private GUIManager guiMgr;
     private GameManager gameManager;
     [SerializeField]
     BGMManager bgmManager;
     private void Awake() {
-        guiMgr = GUIMgr.instance;
+        guiMgr = GUIManager.instance;
         gameManager = GameManager.instance;
         guiMgr.Set(new Vector2(2160, 1080), 1);
         guiMgr.RemoveAllPanel();
