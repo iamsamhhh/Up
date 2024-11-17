@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 namespace MyFramework{
 public class LevelMgr : SingletonBase<LevelMgr>
 {
-    LevelMgrGo mgrGo = LevelMgrGo.instance;
     public void LoadNext(bool sync = false){
         if (sync){
 

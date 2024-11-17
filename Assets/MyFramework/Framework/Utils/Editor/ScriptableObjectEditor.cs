@@ -3,27 +3,44 @@ using UnityEditor;
 using System.Collections.Generic;
 using System;
 using UnityEditor.Search;
+using System.Linq;
 
 namespace MyFramework{
     public class ScriptableObjectEditor : EditorWindow
     {
-        private static ScriptableObjectEditor window;
         private Dictionary<Type, List<ScriptableObject>> scriptableObjectDict = new Dictionary<Type, List<ScriptableObject>>();
         private Dictionary<ScriptableObject, string> scriptableObjectPathDict = new Dictionary<ScriptableObject, string>();
+        private Dictionary<Type, bool> typeFoldedDict = new Dictionary<Type, bool>();
         private ScriptableObject currenScriptableObject;
         private Vector2 scrollPosition;
         private bool showUnityScriptableObject = false;
-        private const float LIST_WIDTH_PERCENTAGE = 0.3f;
+        private bool showFullTypeName = false;
+        private float listWidthPercentage = 0.3f;
 
         [MenuItem("MyFramework/Framework/Util/ScrptableObject Editor")]
         public static void MenuClicked(){
-            window = GetWindow<ScriptableObjectEditor>();
+            var window = GetWindow<ScriptableObjectEditor>();
             window.titleContent = new GUIContent("ScriptableObject Editor");
+            window.showUnityScriptableObject = false;
+            window.showFullTypeName = false;
+            window.RefreshList();
+            window.currenScriptableObject = null;
         }
+        
 
         private void OnGUI(){
+            EditorGUILayout.BeginVertical();
+            
+            if (GUILayout.Button("Refresh list"))
+                RefreshList();
+            showUnityScriptableObject = GUILayout.Toggle(showUnityScriptableObject, new GUIContent("Show Unity ScriptableObjects"));
+            showFullTypeName = GUILayout.Toggle(showFullTypeName, new GUIContent("Show full type name"));
+            listWidthPercentage = EditorGUILayout.Slider(listWidthPercentage, 0, 1);
+            EditorGUILayout.BeginHorizontal();
             DrawList();
             DrawInspector();
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
         private void OnEnable() {
@@ -45,32 +62,27 @@ namespace MyFramework{
                     scriptableObjectDict.Add(scriptableObject.GetType(), new List<ScriptableObject>());
                     scriptableObjectDict[scriptableObject.GetType()].Add(scriptableObject);
                 }
+                if (!typeFoldedDict.ContainsKey(scriptableObject.GetType()))
+                    typeFoldedDict.Add(scriptableObject.GetType(), false);
             }
         }
 
         private void DrawList(){
-            GUILayout.BeginArea(
-                new Rect(0, 0, window.position.width * LIST_WIDTH_PERCENTAGE, window.position.height), 
-                new GUIStyle("FrameBox")
-            );
-            showUnityScriptableObject = GUILayout.Toggle(showUnityScriptableObject, new GUIContent("Show Unity ScriptableObjects"));
+            EditorGUILayout.BeginVertical(EditorStyles.objectField, GUILayout.Width(position.width * listWidthPercentage));
 
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
             foreach (var record in scriptableObjectDict){
-                if (showUnityScriptableObject){
-                    EditorGUILayout.LabelField(record.Key.ToString(), EditorStyles.boldLabel);
-                    foreach (var scriptableObject in record.Value){
-                        if(!scriptableObject)
-                            continue;
-                        if (GUILayout.Button(scriptableObject.name)){
-                            currenScriptableObject = scriptableObject;
-                        }
-                    }
-                }
-                else{
-                    if (record.Key.ToString().Substring(0, 5) == "Unity") continue;
-                    EditorGUILayout.LabelField(record.Key.ToString(), EditorStyles.boldLabel);
+                bool needToShow = true;
+                if (!(record.Key.ToString().Length < 5))
+                    needToShow = record.Key.ToString().Substring(0, 5) != "Unity" || showUnityScriptableObject;
+                
+                if (needToShow){
+                    if (showFullTypeName)
+                        typeFoldedDict[record.Key] = EditorGUILayout.Foldout(typeFoldedDict[record.Key], record.Key.ToString());
+                    else
+                        typeFoldedDict[record.Key] = EditorGUILayout.Foldout(typeFoldedDict[record.Key], record.Key.ToString().Split('.').Last());
+                    if (!typeFoldedDict[record.Key]) continue;
                     foreach (var scriptableObject in record.Value){
                         if(!scriptableObject)
                             continue;
@@ -83,14 +95,11 @@ namespace MyFramework{
 
             EditorGUILayout.EndScrollView();
 
-            GUILayout.EndArea();
+            EditorGUILayout.EndVertical();
         }
 
         private void DrawInspector(){
-            GUILayout.BeginArea (
-                new Rect(window.position.width * LIST_WIDTH_PERCENTAGE, y: 0, window.position.width * (1 - LIST_WIDTH_PERCENTAGE), window.position.height), 
-                new GUIStyle("FrameBox")
-            );
+            EditorGUILayout.BeginVertical(GUILayout.Width(position.width * (1-listWidthPercentage)));
 
             if(!currenScriptableObject) goto exit;
 
@@ -103,7 +112,7 @@ namespace MyFramework{
 
 
             exit:
-            GUILayout.EndArea();
+            EditorGUILayout.EndVertical();
         }
     }
 }
