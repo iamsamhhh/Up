@@ -13,27 +13,48 @@ namespace MyFramework{
         private Dictionary<Type, bool> typeFoldedDict = new Dictionary<Type, bool>();
         private ScriptableObject currenScriptableObject;
         private Vector2 scrollPosition;
-        private bool showUnityScriptableObject = false;
+        private bool showAllScriptableObject = false;
         private bool showFullTypeName = false;
+        private bool showConfigSettings = false;
         private float listWidthPercentage = 0.3f;
+        private ScriptableObjectEditorConfig config;
 
         [MenuItem("MyFramework/Framework/Util/ScrptableObject Editor")]
         public static void MenuClicked(){
             var window = GetWindow<ScriptableObjectEditor>();
             window.titleContent = new GUIContent("ScriptableObject Editor");
-            window.showUnityScriptableObject = false;
+            window.showAllScriptableObject = false;
             window.showFullTypeName = false;
+            window.showConfigSettings = false;
             window.RefreshList();
             window.currenScriptableObject = null;
+            window.config = Resources.Load<ScriptableObjectEditorConfig>("DefaultScriptableObjectEditorConfig");
+            Debug.Log(window.config);
         }
         
 
         private void OnGUI(){
             EditorGUILayout.BeginVertical();
-            
+            EditorGUILayout.BeginHorizontal();
+            showConfigSettings = EditorGUILayout.Foldout(showConfigSettings, "Config");
+            EditorGUILayout.ObjectField(config, config.GetType(), false);
+            if (GUILayout.Button("Ping")){
+                SearchUtils.PingAsset(scriptableObjectPathDict[config]);
+            }
+            EditorGUILayout.EndHorizontal();
+            if (showConfigSettings){
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.Space();
+                EditorGUILayout.BeginVertical();
+                var editor = Editor.CreateEditor(config);
+                editor.OnInspectorGUI();
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+            }
+
             if (GUILayout.Button("Refresh list"))
                 RefreshList();
-            showUnityScriptableObject = GUILayout.Toggle(showUnityScriptableObject, new GUIContent("Show Unity ScriptableObjects"));
+            showAllScriptableObject = GUILayout.Toggle(showAllScriptableObject, new GUIContent("Show All ScriptableObjects"));
             showFullTypeName = GUILayout.Toggle(showFullTypeName, new GUIContent("Show full type name"));
             listWidthPercentage = EditorGUILayout.Slider(listWidthPercentage, 0, 1);
             EditorGUILayout.BeginHorizontal();
@@ -74,9 +95,10 @@ namespace MyFramework{
 
             foreach (var record in scriptableObjectDict){
                 bool needToShow = true;
-                if (!(record.Key.ToString().Length < 5))
-                    needToShow = record.Key.ToString().Substring(0, 5) != "Unity" || showUnityScriptableObject;
-                
+                foreach (var showType in config.showType){
+                    if (!(record.Key.ToString().Length < showType.Key.Length) && needToShow && !showAllScriptableObject)
+                        needToShow = record.Key.ToString().Substring(0, showType.Key.Length) == showType.Key ? showType.Value : true;
+                }
                 if (needToShow){
                     if (showFullTypeName)
                         typeFoldedDict[record.Key] = EditorGUILayout.Foldout(typeFoldedDict[record.Key], record.Key.ToString());
@@ -109,7 +131,6 @@ namespace MyFramework{
             if (GUILayout.Button("Ping")){
                 SearchUtils.PingAsset(scriptableObjectPathDict[currenScriptableObject]);
             }
-
 
             exit:
             EditorGUILayout.EndVertical();

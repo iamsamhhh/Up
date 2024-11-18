@@ -5,9 +5,7 @@ namespace MyFramework{
     [CreateAssetMenu(fileName = "ScriptableObjectEditorConfig", menuName = "MyFramework/Configs/ScriptableObjectEditorConfig")]
     public class ScriptableObjectEditorConfig : ScriptableObject
     {
-        
-
-        public StringBoolDict showType = new StringBoolDict();
+        public StringBoolDict showType;
     }
 }
 
