@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MyFramework;
@@ -6,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
+    [Obsolete("Please use GameManager.instance.userData instead")]
     public int coinCount, maxEnergyLv, fuelPowerLv, energyDurabilityLv, gameLevel, highestScore;
 
     // private UserData _userData;
