@@ -17,7 +17,18 @@ namespace MyFramework{
         private bool showFullTypeName = false;
         private bool showConfigSettings = false;
         private float listWidthPercentage = 0.3f;
-        private ScriptableObjectEditorConfig config;
+        private ScriptableObjectEditorConfig _config;
+        private ScriptableObjectEditorConfig config{
+            get {
+                if (!_config)
+                    _config = Resources.Load<ScriptableObjectEditorConfig>("DefaultScriptableObjectEditorConfig");
+
+                return _config;
+            }
+            set {
+                _config = value;
+            }
+        }
 
         [MenuItem("MyFramework/Framework/Util/ScrptableObject Editor")]
         public static void MenuClicked(){
@@ -37,7 +48,7 @@ namespace MyFramework{
             EditorGUILayout.BeginVertical();
             EditorGUILayout.BeginHorizontal();
             showConfigSettings = EditorGUILayout.Foldout(showConfigSettings, "Config");
-            EditorGUILayout.ObjectField(config, config.GetType(), false);
+            config = EditorGUILayout.ObjectField(config, config.GetType(), false) as ScriptableObjectEditorConfig;
             if (GUILayout.Button("Ping")){
                 SearchUtils.PingAsset(scriptableObjectPathDict[config]);
             }
