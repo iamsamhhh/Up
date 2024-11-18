@@ -8,10 +8,14 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
     public int coinCount, maxEnergyLv, fuelPowerLv, energyDurabilityLv, gameLevel, highestScore;
 
+    // private UserData _userData;
+    public UserData userData;
+
     public bool cameFromGame, gamePaused;
     public Skin currentSkin;
     public SkinList skinList;
     private void Awake() {
+        userData = Resources.Load<UserData>("UserDataForDev");
         skinList = Resources.Load<SkinList>("DefaultList");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
         var currentSkinId = SaveManager.LoadString("CurrentSkinID");
@@ -33,6 +37,9 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         cameFromGame = false;
         gamePaused = false;
 
+        if (SaveManager.LoadObject("UserData", userData)){
+            Debug.Log("Success");
+        }
         coinCount = SaveManager.LoadInt("GoldCount");
         // Debug.Log("Getting Coin count");
         if (coinCount == 0) {
@@ -61,6 +68,15 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
     }
     public void SaveGame(){
+        userData.coinCount = coinCount;
+        userData.maxEnergyLv = maxEnergyLv;
+        userData.gameLevel = gameLevel;
+        userData.highestScore = highestScore;
+        userData.fuelPowerLv = fuelPowerLv;
+        userData.energyDurabilityLv = energyDurabilityLv;
+        userData.skinList = skinList;
+
+        SaveManager.SaveObject(userData, "UserData");
         SaveManager.Save(coinCount, "GoldCount");
         SaveManager.Save(maxEnergyLv, "MaxEnergyLv");
         SaveManager.Save(fuelPowerLv, "EnergyRefuelLv");
@@ -74,13 +90,6 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
         SaveManager.SaveObject(skinDict, "SkinAvailibility");
         SaveManager.Save(currentSkin.id, "CurrentSkinID");
-        // PlayerPrefs.SetInt("CoinCount", coinCount);
-        // PlayerPrefs.SetInt("MaxEnergyLv", maxEnergyLv);
-        // PlayerPrefs.SetInt("EnergyRefuelLv", energyRefuelLv);
-        // PlayerPrefs.SetInt("EnergyWasteLv", energyWasteLv);
-        // PlayerPrefs.SetInt("GameLevel", gameLevel);
-        // PlayerPrefs.Save();
-
     }
 
     public void ResetData(){
@@ -95,6 +104,17 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
         skinList.skinList[0].bought = true;
         currentSkin = skinList.skinList[0];
+
+        userData.coinCount = coinCount;
+        userData.maxEnergyLv = maxEnergyLv;
+        userData.gameLevel = gameLevel;
+        userData.highestScore = highestScore;
+        userData.fuelPowerLv = fuelPowerLv;
+        userData.energyDurabilityLv = energyDurabilityLv;
+        userData.skinList = skinList;
+
+        SaveManager.SaveObject(userData, "UserData");
+
         SaveManager.Save(coinCount, "GoldCount");
         SaveManager.Save(maxEnergyLv, "MaxEnergyLv");
         SaveManager.Save(fuelPowerLv, "EnergyRefuelLv");
