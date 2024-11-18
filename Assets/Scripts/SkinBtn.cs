@@ -9,12 +9,16 @@ public class SkinBtn : MonoBehaviour
     public Button btn;
     public TMP_Text costText;
     public RawImage rawImage;
+    
+    UserData userData {
+        get {return UserData.defaultUserData;}
+    }
     public void OnClick(){
         if (skin.bought){
             GameManager.instance.currentSkin = skin;
         }
         else{
-            if (GameManager.instance.coinCount >= skin.cost){
+            if (userData.coinCount >= skin.cost){
                 GUIManager.instance.AddPopUp(
                     "Are you sure you want to buy this skin that cost " + skin.cost + " Coin?",
                     OnConfirmBtn,
@@ -25,12 +29,12 @@ public class SkinBtn : MonoBehaviour
     }
 
     private void OnConfirmBtn(){
-        GameManager.instance.coinCount -= skin.cost;
+        userData.coinCount -= skin.cost;
         GameManager.instance.currentSkin = skin;
         skin.bought = true;
         GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
+        .GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
     private void onCancelBtn(){}

@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]    
     List<GameObject> dots;
 
+    UserData userData{
+        get {return UserData.defaultUserData;}
+    }
+
     GameManager gameManager {
         get {return GameManager.instance;}
     }
@@ -136,9 +140,9 @@ public class PlayerController : MonoBehaviour
 
     public void SaveGame(){
         gameOverPanel.SetActive(true);
-        gameManager.coinCount += coinCount*gameManager.gameLevel;
+        userData.coinCount += coinCount*userData.gameLevel;
         var currentScore = (int)(transform.position.y+(levelWhenGameStart-1)*1000);
-        gameManager.highestScore = gameManager.highestScore > currentScore ? gameManager.highestScore : currentScore;
+        userData.highestScore = userData.highestScore > currentScore ? userData.highestScore : currentScore;
         gameManager.SaveGame();
     }
 
@@ -146,12 +150,12 @@ public class PlayerController : MonoBehaviour
         gameOver = false;
         coinCount = 0;
         alreadyPaused = false;
-        levelWhenGameStart = gameManager.gameLevel;
+        levelWhenGameStart = userData.gameLevel;
         currentLevel = levelWhenGameStart;
-        maxEnergy = gameManager.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
+        maxEnergy = userData.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
         energyRemaining = maxEnergy;
-        energyRefuel = initialFuelPower + gameManager.fuelPowerLv*fuelPowerIncreasePerLv;
-        energyWastePercentage = (100-gameManager.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
+        energyRefuel = initialFuelPower + userData.fuelPowerLv*fuelPowerIncreasePerLv;
+        energyWastePercentage = (100-userData.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
@@ -220,7 +224,7 @@ public class PlayerController : MonoBehaviour
         if (currentLevel < level){
             var levelDiff = level - currentLevel;
             for (var i = 0; i < levelDiff; i++){
-                gameManager.gameLevel++;
+                userData.gameLevel++;
                 generator.LevelUp();
                 currentLevel++;
             }

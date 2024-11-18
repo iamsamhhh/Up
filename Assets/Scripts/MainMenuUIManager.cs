@@ -12,6 +12,9 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     private GameManager gameManager;
     [SerializeField]
     BGMManager bgmManager;
+    UserData userData {
+        get {return UserData.defaultUserData;}
+    }
     private void Awake() {
         guiMgr = GUIManager.instance;
         gameManager = GameManager.instance;
@@ -34,7 +37,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         guiMgr.RemovePanel("TitleMenu");
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
         guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
-        foreach (var skin in gameManager.skinList.skinList){
+        foreach (var skin in userData.skinList.skinList){
             var btnScript = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent)
                                 .GetComponent<SkinBtn>();
             btnScript.skin = skin;
@@ -48,23 +51,23 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         guiMgr.OnClick(mainMenuComponents.GetAddEnergyRefuelBtn(), OnAddEnergyRefuelBtn);
         guiMgr.OnClick(mainMenuComponents.GetAddEnergyWasteBtn(), OnAddEnergyWasteBtn);
 
-        mainMenuComponents.GetCoinCntTxt().text = GameManager.instance.coinCount.ToString();
+        mainMenuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
 
-        mainMenuComponents.GetHighestScoreTxt().text = "Highest score: " + GameManager.instance.highestScore.ToString();
+        mainMenuComponents.GetHighestScoreTxt().text = "Highest score: " + userData.highestScore.ToString();
 
         // Set max enery level texts
-        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + gameManager.maxEnergyLv.ToString();
-        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(gameManager.maxEnergyLv).ToString();
+        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + userData.maxEnergyLv.ToString();
+        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(userData.maxEnergyLv).ToString();
 
         // Set enery refuel level texts
-        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + gameManager.fuelPowerLv.ToString();
-        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(gameManager.fuelPowerLv).ToString();
+        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + userData.fuelPowerLv.ToString();
+        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(userData.fuelPowerLv).ToString();
 
         // Set enery waste level texts
-        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + gameManager.energyDurabilityLv.ToString();
-        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(gameManager.energyDurabilityLv).ToString();
+        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + userData.energyDurabilityLv.ToString();
+        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(userData.energyDurabilityLv).ToString();
         
-        mainMenuComponents.GetGameLevelTxt().text = "Level: " + gameManager.gameLevel;
+        mainMenuComponents.GetGameLevelTxt().text = "Level: " + userData.gameLevel;
     }
 
     private void OnExitBtn(){
@@ -99,20 +102,20 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     {
         gameManager.ResetData();
         var mainMenuComponents = guiMgr.GetPanel("MainMenu").GetComponent<MainMenuComponents>();
-        mainMenuComponents.GetCoinCntTxt().text = gameManager.coinCount.ToString();
+        mainMenuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
         // Set max enery level texts
-        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + gameManager.maxEnergyLv.ToString();
-        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(gameManager.maxEnergyLv).ToString();
+        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + userData.maxEnergyLv.ToString();
+        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(userData.maxEnergyLv).ToString();
 
         // Set enery refuel level texts
-        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + gameManager.fuelPowerLv.ToString();
-        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(gameManager.fuelPowerLv).ToString();
+        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + userData.fuelPowerLv.ToString();
+        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(userData.fuelPowerLv).ToString();
 
         // Set enery waste level texts
-        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + gameManager.energyDurabilityLv.ToString();
-        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(gameManager.energyDurabilityLv).ToString();
+        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + userData.energyDurabilityLv.ToString();
+        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(userData.energyDurabilityLv).ToString();
         
-        mainMenuComponents.GetGameLevelTxt().text = "Level: " + gameManager.gameLevel;
+        mainMenuComponents.GetGameLevelTxt().text = "Level: " + userData.gameLevel;
     }
 
     private void OnSetLevelBtn()
@@ -120,22 +123,22 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().GetSetLevelIFValue();
         int num;
         if (int.TryParse(value, out num)){
-            gameManager.gameLevel = num;
+            userData.gameLevel = num;
         }
         guiMgr.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetGameLevelTxt().text = "Level: " + gameManager.gameLevel.ToString();
+        .GetGameLevelTxt().text = "Level: " + userData.gameLevel.ToString();
     }
 
     private void OnAddCoinBtn(){
         var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().GetAddCoinIFValue();
         int num;
         if (int.TryParse(value, out num)){
-            gameManager.coinCount += num;
+            userData.coinCount += num;
         }
         guiMgr.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetCoinCntTxt().text = gameManager.coinCount.ToString();
+        .GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
     private void OnSettingsXBtn(){
@@ -144,44 +147,44 @@ public class MainMenuUIManager : MonoBehaviourSimplify
 
     private void OnAddMaxEnergyBtn() {
         
-        var coinNeed = CoinNeedToLevelUp(gameManager.maxEnergyLv);
-        if (coinNeed > gameManager.coinCount) {
+        var coinNeed = CoinNeedToLevelUp(userData.maxEnergyLv);
+        if (coinNeed > userData.coinCount) {
             return;
         }
-        gameManager.maxEnergyLv += 1;
-        gameManager.coinCount -= coinNeed;
+        userData.maxEnergyLv += 1;
+        userData.coinCount -= coinNeed;
         var mainMenuComponents = guiMgr.GetPanel("MainMenu").GetComponent<MainMenuComponents>();
-        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + gameManager.maxEnergyLv.ToString();
-        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(gameManager.maxEnergyLv).ToString();
-        mainMenuComponents.GetCoinCntTxt().text = gameManager.coinCount.ToString();
+        mainMenuComponents.GetMaxEnergyLvTxt().text = "Lv. " + userData.maxEnergyLv.ToString();
+        mainMenuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(userData.maxEnergyLv).ToString();
+        mainMenuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
     private void OnAddEnergyRefuelBtn() {
         
-        var coinNeed = CoinNeedToLevelUp(gameManager.fuelPowerLv);
-        if (coinNeed > gameManager.coinCount) {
+        var coinNeed = CoinNeedToLevelUp(userData.fuelPowerLv);
+        if (coinNeed > userData.coinCount) {
             return;
         }
-        gameManager.fuelPowerLv += 1;
-        gameManager.coinCount -= coinNeed;
+        userData.fuelPowerLv += 1;
+        userData.coinCount -= coinNeed;
         var mainMenuComponents = guiMgr.GetPanel("MainMenu").GetComponent<MainMenuComponents>();
-        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + gameManager.fuelPowerLv.ToString();
-        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(gameManager.fuelPowerLv).ToString();
-        mainMenuComponents.GetCoinCntTxt().text = gameManager.coinCount.ToString();
+        mainMenuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + userData.fuelPowerLv.ToString();
+        mainMenuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(userData.fuelPowerLv).ToString();
+        mainMenuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
     private void OnAddEnergyWasteBtn() {
         
-        var coinNeed = CoinNeedToLevelUp(gameManager.energyDurabilityLv);
-        if (coinNeed > gameManager.coinCount) {
+        var coinNeed = CoinNeedToLevelUp(userData.energyDurabilityLv);
+        if (coinNeed > userData.coinCount) {
             return;
         }
-        gameManager.energyDurabilityLv += 1;
-        gameManager.coinCount -= coinNeed;
+        userData.energyDurabilityLv += 1;
+        userData.coinCount -= coinNeed;
         var mainMenuComponents = guiMgr.GetPanel("MainMenu").GetComponent<MainMenuComponents>();
-        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + gameManager.energyDurabilityLv.ToString();
-        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(gameManager.energyDurabilityLv).ToString();
-        mainMenuComponents.GetCoinCntTxt().text = gameManager.coinCount.ToString();
+        mainMenuComponents.GetEnergyWasteLvTxt().text = "Lv. " + userData.energyDurabilityLv.ToString();
+        mainMenuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(userData.energyDurabilityLv).ToString();
+        mainMenuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
     int CoinNeedToLevelUp(int currentLevel){
