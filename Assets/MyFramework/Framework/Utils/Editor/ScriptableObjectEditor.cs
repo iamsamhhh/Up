@@ -132,7 +132,7 @@ namespace MyFramework{
         }
 
         private void DrawInspector(){
-            EditorGUILayout.BeginVertical(GUILayout.Width(position.width * (1-listWidthPercentage)));
+            EditorGUILayout.BeginVertical(GUILayout.Width(position.width * (1-listWidthPercentage-0.02f)));
 
             if(!currenScriptableObject) goto exit;
 
