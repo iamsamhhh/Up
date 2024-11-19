@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new player config", menuName = "Configuration/Player config")]
+[CreateAssetMenu(fileName = "New player config", menuName = "Configuration/Player Config")]
 public class PlayerConfig : ScriptableObject{
     [Tooltip("The force can be generated per energy")]
     public float energyForce;

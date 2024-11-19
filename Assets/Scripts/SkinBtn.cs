@@ -11,7 +11,7 @@ public class SkinBtn : MonoBehaviourSimplify
     public RawImage rawImage;
     
     UserData userData {
-        get {return UserData.defaultUserData;}
+        get {return UserData.userData;}
     }
 
     private void Awake() {

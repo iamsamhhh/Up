@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
     List<GameObject> dots;
 
     UserData userData{
-        get {return UserData.defaultUserData;}
+        get {return UserData.userData;}
     }
 
     GameManager gameManager {

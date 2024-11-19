@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 522405646b8df407baf6a71054f5bff9, type: 3}
-  m_Name: UserDataForDev
+  m_Name: DevUserData
   m_EditorClassIdentifier: 
   coinCount: 4
   maxEnergyLv: 0

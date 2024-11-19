@@ -6,19 +6,23 @@ using UnityEngine;
 public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
     public UserData userData{
-        get { return UserData.defaultUserData; }
+        get { return UserData.userData; }
     }
 
     public bool cameFromGame, gamePaused;
-    [Obsolete("Use userData.currentSkin instead")]
-    public Skin currentSkin;
 
     private void Awake() {
         if (SaveManager.LoadObject("UserData", userData)){
             Debug.Log("Success");
         }
-        Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
-        
+        if (!userData.currentSkin){
+            userData.currentSkin = SkinList.defaultSkinList.list[0];
+        }
+        if (userData.purchasedSkins.Count == 0){
+            userData.purchasedSkins.Add(userData.currentSkin);
+        }
+            
+
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
 	    Application.targetFrameRate = 120;
 

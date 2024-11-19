@@ -8,7 +8,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     [SerializeField]
     BGMManager bgmManager;
     UserData userData {
-        get {return UserData.defaultUserData;}
+        get {return UserData.userData;}
     }
     private void Awake() {
         guiMgr = GUIManager.instance;

@@ -24,7 +24,7 @@ public class EnergyGenerator : MonoBehaviour
     void Awake()
     {
         supposedNumOfEnergy = maxNumOfEnergy;
-        numOfBomb = (UserData.defaultUserData.gameLevel-1)*numOfBombAddPerLv;
+        numOfBomb = (UserData.userData.gameLevel-1)*numOfBombAddPerLv;
         supposedNumOfEnergy -= numOfBomb;
         if (supposedNumOfEnergy < 0){
             supposedNumOfEnergy = 0;
@@ -89,7 +89,7 @@ public class EnergyGenerator : MonoBehaviour
     }
 
     public void LevelUp(){
-        var newNumOfBomb = (UserData.defaultUserData.gameLevel-1)*numOfBombAddPerLv;
+        var newNumOfBomb = (UserData.userData.gameLevel-1)*numOfBombAddPerLv;
         var numOfBombDiff = newNumOfBomb - numOfBomb;
         supposedNumOfEnergy = maxNumOfEnergy - newNumOfBomb;
         for (int i = 0; i < numOfBombDiff; i++){
