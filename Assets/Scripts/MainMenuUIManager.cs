@@ -37,7 +37,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         guiMgr.RemovePanel("TitleMenu");
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
         guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
-        foreach (var skin in userData.skinList.skinList){
+        foreach (var skin in userData.skinList.list){
             var btnScript = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent)
                                 .GetComponent<SkinBtn>();
             btnScript.skin = skin;

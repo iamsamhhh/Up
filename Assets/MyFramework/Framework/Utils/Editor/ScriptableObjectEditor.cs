@@ -135,7 +135,7 @@ namespace MyFramework{
             EditorGUILayout.BeginVertical(GUILayout.Width(position.width * (1-listWidthPercentage-0.02f)));
 
             if(!currenScriptableObject) goto exit;
-
+            EditorGUILayout.LabelField(currenScriptableObject.name);
             var editor = Editor.CreateEditor(currenScriptableObject);
             editor.OnInspectorGUI();
 

@@ -15,12 +15,15 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     public Skin currentSkin;
 
     private void Awake() {
+        if (SaveManager.LoadObject("UserData", userData)){
+            Debug.Log("Success");
+        }
         userData.skinList = Resources.Load<SkinList>("DefaultList");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
         var currentSkinId = SaveManager.LoadString("CurrentSkinID");
-        currentSkin = userData.skinList.skinList[0];
+        currentSkin = userData.skinList.list[0];
         if (SaveManager.LoadObject("SkinAvailibility", skinDict)){
-            foreach (var skin in userData.skinList.skinList){
+            foreach (var skin in userData.skinList.list){
                 if (skinDict.ContainsKey(skin.id))
                     skin.bought = skinDict[skin.id];
                 if (skin.id == currentSkinId){
@@ -35,16 +38,13 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
 
         cameFromGame = false;
         gamePaused = false;
-
-        if (SaveManager.LoadObject("UserData", userData)){
-            Debug.Log("Success");
-        }
+        
     }
     public void SaveGame(){
         SaveManager.SaveObject(userData, "UserData");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
 
-        foreach (var skin in userData.skinList.skinList) {
+        foreach (var skin in userData.skinList.list) {
             skinDict.Add(skin.id, skin.bought);
         }
         SaveManager.SaveObject(skinDict, "SkinAvailibility");
@@ -58,16 +58,16 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         userData.energyDurabilityLv = 0;
         userData.gameLevel = 1;
         userData.highestScore = 0;
-        foreach (var skin in userData.skinList.skinList){
+        foreach (var skin in userData.skinList.list){
             skin.bought = false;
         }
-        userData.skinList.skinList[0].bought = true;
-        currentSkin = userData.skinList.skinList[0];
+        userData.skinList.list[0].bought = true;
+        currentSkin = userData.skinList.list[0];
 
         SaveManager.SaveObject(userData, "UserData");
 
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
-        foreach (var skin in userData.skinList.skinList) {
+        foreach (var skin in userData.skinList.list) {
             skinDict.Add(skin.id, skin.bought);
         }
         SaveManager.SaveObject(skinDict, "SkinAvailibility");
