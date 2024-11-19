@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingletonBaseAuto<GameManager>
 {
-    // private UserData _userData;
     public UserData userData{
         get { return UserData.defaultUserData; }
     }
@@ -15,8 +14,6 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     public bool cameFromGame, gamePaused;
     public Skin currentSkin;
 
-    [Obsolete("Please use UserData instead")]
-    public SkinList skinList;
     private void Awake() {
         userData.skinList = Resources.Load<SkinList>("DefaultList");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
@@ -44,8 +41,6 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         }
     }
     public void SaveGame(){
-        userData.skinList = userData.skinList;
-
         SaveManager.SaveObject(userData, "UserData");
         Dictionary<string, bool> skinDict = new Dictionary<string, bool>();
 
