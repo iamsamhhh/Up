@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyForce: 50
   minEnergyNeeded: 5
-  energyNeedMul: 0.5
+  energyNeedMul: 1
   energyBurnOff: 1
   energyBurnOffSlowMo: 10
   initialFuelPower: 30

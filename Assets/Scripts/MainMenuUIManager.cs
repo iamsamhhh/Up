@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MyFramework;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.UI;
 
 public class MainMenuUIManager : MonoBehaviourSimplify
 {

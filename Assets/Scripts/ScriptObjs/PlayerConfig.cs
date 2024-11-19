@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "new player config", menuName = "Configuration/Player config")]
@@ -33,5 +32,7 @@ public class PlayerConfig : ScriptableObject{
     public float timeSlowAmount;
     [Tooltip("time to fade in slo mo effect")]
     public float sloMoEffectFadeInTime;
+    [Tooltip("Whether the player bounce back or bounce randomly")]
+    public bool bounceBack;
 
 }

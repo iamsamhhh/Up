@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using MyFramework;
-using System;
+
 public class SkinBtn : MonoBehaviour
 {
     public Skin skin;

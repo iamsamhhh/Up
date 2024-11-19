@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnergyGenerator : MonoBehaviour
 {
@@ -17,8 +15,6 @@ public class EnergyGenerator : MonoBehaviour
     int maxNumOfEnergy, numOfBombAddPerLv, maxNumOfCoin, noSpawningDistance;
     int numOfBomb;
     int supposedNumOfEnergy;
-    [SerializeField]
-    Vector2 scrWidthAndHeight;
 
     List<Transform> energyList = new List<Transform>();
     List<Transform> bombList = new List<Transform>();

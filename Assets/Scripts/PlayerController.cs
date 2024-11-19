@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     AudioSource audioSource;
 
     // Configs
+    [Obsolete("User playerConfig instead")]
     private float energyForce, maxExplodeForce,
     minEnergyNeeded, energyNeedMul,
     initialFuelPower, energyBurnOff,
