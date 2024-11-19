@@ -278,14 +278,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Energy"){
-            var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
+            var explodeForce = new Vector2
+                (UnityEngine.Random.Range(-maxExplodeForce, maxExplodeForce), 
+                UnityEngine.Random.Range(-maxExplodeForce/5, maxExplodeForce)
+            );
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
             generator.RemoveObject(other.transform, EObjectType.Energy);
             energyRemaining += energyRefuel;
             audioSource.Play();
         }
         if (other.gameObject.tag == "Bomb"){
-            var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
+            var explodeForce = new Vector2(
+                UnityEngine.Random.Range(-maxExplodeForce, maxExplodeForce),
+                UnityEngine.Random.Range(-maxExplodeForce/5, maxExplodeForce)
+            );
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
             generator.RemoveObject(other.transform, EObjectType.Bomb);
             energyRemaining -= 30;
