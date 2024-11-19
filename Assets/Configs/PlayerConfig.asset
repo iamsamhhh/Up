@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyForce: 50
   minEnergyNeeded: 5
-  energyNeedMul: 1
+  energyNeedMul: 2
   energyBurnOff: 1
   energyBurnOffSlowMo: 10
   initialFuelPower: 30
   initialMaxEnergy: 100
-  maxExplodeForce: 30
+  maxExplodeForce: 50
   maxLavaDistance: 70
   lavaSpeed: 3
   maxEnergyIncreasePerLv: 30
@@ -27,3 +27,4 @@ MonoBehaviour:
   energyDuribilityIncreasePerLv: 2
   timeSlowAmount: 10
   sloMoEffectFadeInTime: 0.2
+  bounceBack: 0

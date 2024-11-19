@@ -22,7 +22,7 @@ public class SkinBtn : MonoBehaviour
                 GUIManager.instance.AddPopUp(
                     "Are you sure you want to buy this skin that cost " + skin.cost + " Coin?",
                     OnConfirmBtn,
-                    onCancelBtn
+                    ()=>{}
                     );
             }
         }
@@ -33,10 +33,10 @@ public class SkinBtn : MonoBehaviour
         userData.currentSkin = skin;
         userData.purchasedSkins.Add(skin);
         rawImage.color = Color.white;
+        costText.text = "";
         GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
         .GetCoinCntTxt().text = userData.coinCount.ToString();
     }
 
-    private void onCancelBtn(){}
 }

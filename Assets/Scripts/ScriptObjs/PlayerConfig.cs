@@ -27,7 +27,7 @@ public class PlayerConfig : ScriptableObject{
     [Tooltip("Fuel power increase per level of fuel power")]
     public float fuelPowerIncreasePerLv;
     [Tooltip("Energy durability increase per level of energy durability")]
-    public float energyDuribilityIncreasePerLv;
+    public float energyDurabilityIncreasePerLv;
     [Tooltip("How many times slower when slo mo")]
     public float timeSlowAmount;
     [Tooltip("time to fade in slo mo effect")]

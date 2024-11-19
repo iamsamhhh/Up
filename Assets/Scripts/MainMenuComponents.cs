@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 public class MainMenuComponents : MonoBehaviour
 {
-    [SerializeField]
-    Button addMaxEnergyBtn, addEnergyRefuelBtn, addEnergyWasteBtn,
+
+    public Button addMaxEnergyBtn, addEnergyRefuelBtn, addEnergyWasteBtn,
         startGameBtn, settingsBtn;
-    [SerializeField]
-    TMP_Text maxEnergyLvTxt, energyRefuelLvTxt, energyWasteLvTxt,
+
+    public TMP_Text maxEnergyLvTxt, energyRefuelLvTxt, energyWasteLvTxt,
         coinCntTxt, gameLevelTxt,
         coin4MaxEnergyTxt, coin4EnergyRefuelTxt, coin4EnergyWasteTxt, 
         highestScoreTxt;
