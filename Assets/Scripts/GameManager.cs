@@ -39,6 +39,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         userData.highestScore = 0;
         userData.currentSkin = SkinList.defaultSkinList.list[0];
         userData.purchasedSkins.Clear();
+        userData.purchasedSkins.Add(userData.currentSkin);
 
         SaveManager.SaveObject(userData, "UserData");
     }

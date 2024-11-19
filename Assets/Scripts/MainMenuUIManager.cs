@@ -31,7 +31,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     private void OnStartBtn(){
         guiMgr.RemovePanel("TitleMenu");
         var mainMenuComponents = guiMgr.AddPanel("MainMenu", ELayer.Middle).GetComponent<MainMenuComponents>();
-        guiMgr.OnClick(mainMenuComponents.GetStartGameBtn(), OnStartGameBtn);
+        guiMgr.OnClick(mainMenuComponents.startGameBtn, OnStartGameBtn);
         foreach (var skin in SkinList.defaultSkinList.list){
             var btnScript = Instantiate(Resources.Load<GameObject>("SkinBtn"), mainMenuComponents.skinContent)
                                 .GetComponent<SkinBtn>();
@@ -47,33 +47,33 @@ public class MainMenuUIManager : MonoBehaviourSimplify
             }
         }
         
-        guiMgr.OnClick(mainMenuComponents.GetSettingsBtn(), OnSettingsBtn);
-        guiMgr.OnClick(mainMenuComponents.GetAddMaxEnergyBtn(), OnAddMaxEnergyBtn);
-        guiMgr.OnClick(mainMenuComponents.GetAddEnergyRefuelBtn(), OnAddEnergyRefuelBtn);
-        guiMgr.OnClick(mainMenuComponents.GetAddEnergyWasteBtn(), OnAddEnergyWasteBtn);
+        guiMgr.OnClick(mainMenuComponents.settingsBtn, OnSettingsBtn);
+        guiMgr.OnClick(mainMenuComponents.addMaxEnergyBtn, OnAddMaxEnergyBtn);
+        guiMgr.OnClick(mainMenuComponents.addEnergyRefuelBtn, OnAddEnergyRefuelBtn);
+        guiMgr.OnClick(mainMenuComponents.addEnergyWasteBtn, OnAddEnergyWasteBtn);
 
         RefreshUI();
     }
 
     private void RefreshUI(){
         var menuComponents = guiMgr.GetPanel("MainMenu").GetComponent<MainMenuComponents>();
-        menuComponents.GetCoinCntTxt().text = userData.coinCount.ToString();
+        menuComponents.coinCntTxt.text = userData.coinCount.ToString();
 
-        menuComponents.GetHighestScoreTxt().text = "Highest score: " + userData.highestScore.ToString();
+        menuComponents.highestScoreTxt.text = "Highest score: " + userData.highestScore.ToString();
 
         // Set max enery level texts
-        menuComponents.GetMaxEnergyLvTxt().text = "Lv. " + userData.maxEnergyLv.ToString();
-        menuComponents.GetCoin4MaxEnergyTxt().text = CoinNeedToLevelUp(userData.maxEnergyLv).ToString();
+        menuComponents.maxEnergyLvTxt.text = "Lv. " + userData.maxEnergyLv.ToString();
+        menuComponents.coin4MaxEnergyTxt.text = CoinNeedToLevelUp(userData.maxEnergyLv).ToString();
 
         // Set enery refuel level texts
-        menuComponents.GetEnergyRefuelLvTxt().text = "Lv. " + userData.fuelPowerLv.ToString();
-        menuComponents.GetCoin4EnergyRefuelTxt().text = CoinNeedToLevelUp(userData.fuelPowerLv).ToString();
+        menuComponents.energyRefuelLvTxt.text = "Lv. " + userData.fuelPowerLv.ToString();
+        menuComponents.coin4EnergyRefuelTxt.text = CoinNeedToLevelUp(userData.fuelPowerLv).ToString();
 
         // Set enery waste level texts
-        menuComponents.GetEnergyWasteLvTxt().text = "Lv. " + userData.energyDurabilityLv.ToString();
-        menuComponents.GetCoin4EnergyWasteTxt().text = CoinNeedToLevelUp(userData.energyDurabilityLv).ToString();
+        menuComponents.energyWasteLvTxt.text = "Lv. " + userData.energyDurabilityLv.ToString();
+        menuComponents.coin4EnergyWasteTxt.text = CoinNeedToLevelUp(userData.energyDurabilityLv).ToString();
         
-        menuComponents.GetGameLevelTxt().text = "Level: " + userData.gameLevel;
+        menuComponents.gameLevelTxt.text = "Level: " + userData.gameLevel;
     }
 
     private void OnExitBtn(){
@@ -91,12 +91,12 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     private void OnSettingsBtn(){
         var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top)
                                         .GetComponent<SettingsPanelComponents>();
-        guiMgr.OnClick(settingsPanelComponents.GetExitGameBtn(), OnExitBtn);
-        guiMgr.OnClick(settingsPanelComponents.GetXBtn(), OnSettingsXBtn);
-        settingsPanelComponents.OnAddCoinBtn(OnAddCoinBtn);
-        settingsPanelComponents.OnSetLevelBtn(OnSetLevelBtn);
-        settingsPanelComponents.OnResetDataBtn(OnResetDataBtn);
-        settingsPanelComponents.OnSaveGameBtn(OnSaveGameBtn);
+        guiMgr.OnClick(settingsPanelComponents.exitGameBtn, OnExitBtn);
+        guiMgr.OnClick(settingsPanelComponents.xBtn, OnSettingsXBtn);
+        guiMgr.OnClick(settingsPanelComponents.addCoinBtn, OnAddCoinBtn);
+        guiMgr.OnClick(settingsPanelComponents.setLevelBtn, OnSetLevelBtn);
+        guiMgr.OnClick(settingsPanelComponents.resetDataBtn, OnResetDataBtn);
+        guiMgr.OnClick(settingsPanelComponents.saveGameBtn, OnSaveGameBtn);
     }
 
     private void OnSaveGameBtn()
@@ -108,29 +108,30 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     {
         gameManager.ResetData();
         RefreshUI();
+        BroadcastEvent("OnResetData", this);
     }
 
     private void OnSetLevelBtn()
     {
-        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().GetSetLevelIFValue();
+        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().setLevelIF.text;
         int num;
         if (int.TryParse(value, out num)){
             userData.gameLevel = num;
         }
         guiMgr.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetGameLevelTxt().text = "Level: " + userData.gameLevel.ToString();
+        .gameLevelTxt.text = "Level: " + userData.gameLevel.ToString();
     }
 
     private void OnAddCoinBtn(){
-        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().GetAddCoinIFValue();
+        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().addCoinIF.text;
         int num;
         if (int.TryParse(value, out num)){
             userData.coinCount += num;
         }
         guiMgr.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetCoinCntTxt().text = userData.coinCount.ToString();
+        .coinCntTxt.text = userData.coinCount.ToString();
     }
 
     private void OnSettingsXBtn(){

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using MyFramework;
 
-public class SkinBtn : MonoBehaviour
+public class SkinBtn : MonoBehaviourSimplify
 {
     public Skin skin;
     public Button btn;
@@ -13,6 +13,15 @@ public class SkinBtn : MonoBehaviour
     UserData userData {
         get {return UserData.defaultUserData;}
     }
+
+    private void Awake() {
+        AddEvent("OnResetData", OnResetData);
+    }
+
+    private void OnDestroy() {
+        RemoveAllLocalEvents();
+    }
+
     public void OnClick(){
         if (userData.purchasedSkins.Contains(skin)){
             userData.currentSkin = skin;
@@ -36,7 +45,19 @@ public class SkinBtn : MonoBehaviour
         costText.text = "";
         GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
-        .GetCoinCntTxt().text = userData.coinCount.ToString();
+        .coinCntTxt.text = userData.coinCount.ToString();
+    }
+
+    private void OnResetData(object sender){
+        Debug.LogFormat("{0} recieved event sent by {1}", this, sender);
+        if (userData.purchasedSkins.Contains(skin)){
+            rawImage.color = Color.white;
+            costText.text = "";
+        }
+        else{
+            rawImage.color = new Color(.5f, .5f, .5f);
+            costText.text = skin.cost.ToString();
+        }
     }
 
 }
