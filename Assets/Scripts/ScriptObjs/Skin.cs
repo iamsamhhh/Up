@@ -5,7 +5,6 @@ using UnityEngine;
 public class Skin : ScriptableObject
 {
     public string id;
-    public bool bought;
     public int cost;
     public bool haveTrail;
     public Color trailColor;

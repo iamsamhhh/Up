@@ -14,8 +14,8 @@ public class SkinBtn : MonoBehaviour
         get {return UserData.defaultUserData;}
     }
     public void OnClick(){
-        if (skin.bought){
-            GameManager.instance.currentSkin = skin;
+        if (userData.purchasedSkins.Contains(skin)){
+            userData.currentSkin = skin;
         }
         else{
             if (userData.coinCount >= skin.cost){
@@ -30,8 +30,9 @@ public class SkinBtn : MonoBehaviour
 
     private void OnConfirmBtn(){
         userData.coinCount -= skin.cost;
-        GameManager.instance.currentSkin = skin;
-        skin.bought = true;
+        userData.currentSkin = skin;
+        userData.purchasedSkins.Add(skin);
+        rawImage.color = Color.white;
         GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
         .GetCoinCntTxt().text = userData.coinCount.ToString();

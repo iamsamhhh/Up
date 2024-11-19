@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
-        var skin = gameManager.currentSkin;
+        var skin = userData.currentSkin;
         if (skin.haveTrail){
             var trailRenderer = GetComponent<TrailRenderer>();
             trailRenderer.enabled = true;
