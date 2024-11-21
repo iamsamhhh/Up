@@ -20,3 +20,4 @@ MonoBehaviour:
   highestScore: 0
   purchasedSkins: []
   currentSkin: {fileID: 0}
+  fileName: TestUserData
