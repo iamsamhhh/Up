@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522405646b8df407baf6a71054f5bff9, type: 3}
+  m_Name: DevUserData
+  m_EditorClassIdentifier: 
+  coinCount: 3
+  maxEnergyLv: 0
+  fuelPowerLv: 0
+  energyDurabilityLv: 0
+  gameLevel: 1
+  highestScore: 176
+  purchasedSkins:
+  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
+  currentSkin: {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
+  fileName: DevUserData

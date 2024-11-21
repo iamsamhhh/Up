@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     AudioSource audioSource;
 
     // Configs
+    [Obsolete("User playerConfig instead")]
     private float energyForce, maxExplodeForce,
     minEnergyNeeded, energyNeedMul,
     initialFuelPower, energyBurnOff,
@@ -53,13 +55,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField]    
     List<GameObject> dots;
 
+    UserData userData{
+        get {return UserData.userData;}
+    }
+
     GameManager gameManager {
         get {return GameManager.instance;}
     }
 
     // Start is called before the first frame update
     void Start(){
-        SetUpConfiguration();
         SetUpVariables();
     }
 
@@ -83,7 +88,7 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateLava();
-        energyRemaining -= energyWastePercentage*Time.deltaTime/(1/energyBurnOff);
+        energyRemaining -= energyWastePercentage*Time.deltaTime/(1/playerConfig.energyBurnOff);
         UpdateHeightIndicator();
         slider.fillAmount = energyRemaining/maxEnergy;
 
@@ -104,7 +109,7 @@ public class PlayerController : MonoBehaviour
             energyRemaining = maxEnergy;
         }
         if(Input.GetMouseButtonDown(0)){
-            Time.timeScale = 1/timeSlowAmount;
+            Time.timeScale = 1/playerConfig.timeSlowAmount;
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
             StopAllCoroutines();
             foreach (var dot in dots){
@@ -113,7 +118,7 @@ public class PlayerController : MonoBehaviour
         }
         if(Input.GetMouseButton(0)){
             OnCursorPress();
-            energyRemaining -= energyWastePercentage*Time.deltaTime/(1/(energyBurnOff*energyBurnOffSlowMo));
+            energyRemaining -= energyWastePercentage*Time.deltaTime/(1/(playerConfig.energyBurnOff*playerConfig.energyBurnOffSlowMo));
             ppvNormal.weight = Mathf.Lerp(ppvNormal.weight, 0, (1/playerConfig.sloMoEffectFadeInTime)*(Time.deltaTime/Time.timeScale));
         }
         if(Input.GetMouseButtonUp(0)){
@@ -136,9 +141,9 @@ public class PlayerController : MonoBehaviour
 
     public void SaveGame(){
         gameOverPanel.SetActive(true);
-        gameManager.coinCount += coinCount*gameManager.gameLevel;
+        userData.coinCount += coinCount*userData.gameLevel;
         var currentScore = (int)(transform.position.y+(levelWhenGameStart-1)*1000);
-        gameManager.highestScore = gameManager.highestScore > currentScore ? gameManager.highestScore : currentScore;
+        userData.highestScore = userData.highestScore > currentScore ? userData.highestScore : currentScore;
         gameManager.SaveGame();
     }
 
@@ -146,16 +151,16 @@ public class PlayerController : MonoBehaviour
         gameOver = false;
         coinCount = 0;
         alreadyPaused = false;
-        levelWhenGameStart = gameManager.gameLevel;
+        levelWhenGameStart = userData.gameLevel;
         currentLevel = levelWhenGameStart;
-        maxEnergy = gameManager.maxEnergyLv*maxEnergyIncreasePerLv+initialMaxEnergy;
+        maxEnergy = userData.maxEnergyLv*playerConfig.maxEnergyIncreasePerLv+playerConfig.initialMaxEnergy;
         energyRemaining = maxEnergy;
-        energyRefuel = initialFuelPower + gameManager.fuelPowerLv*fuelPowerIncreasePerLv;
-        energyWastePercentage = (100-gameManager.energyDurabilityLv*energyDurabilityIncreasePerLv)/100;
+        energyRefuel = playerConfig.initialFuelPower + userData.fuelPowerLv*playerConfig.fuelPowerIncreasePerLv;
+        energyWastePercentage = (100-userData.energyDurabilityLv*playerConfig.energyDurabilityIncreasePerLv)/100;
         Time.timeScale = 1;
         Time.fixedDeltaTime = 0.02f;
         rb = GetComponent<Rigidbody2D>();
-        var skin = gameManager.currentSkin;
+        var skin = userData.currentSkin;
         if (skin.haveTrail){
             var trailRenderer = GetComponent<TrailRenderer>();
             trailRenderer.enabled = true;
@@ -176,22 +181,6 @@ public class PlayerController : MonoBehaviour
         ppvNormal.weight = 1f;
     }
 
-    void SetUpConfiguration(){
-        energyForce = playerConfig.energyForce;
-        maxExplodeForce = playerConfig.maxExplodeForce;
-        minEnergyNeeded = playerConfig.minEnergyNeeded;
-        energyNeedMul = playerConfig.energyNeedMul;
-        initialFuelPower = playerConfig.initialFuelPower;
-        energyBurnOff = playerConfig.energyBurnOff;
-        energyBurnOffSlowMo = playerConfig.energyBurnOffSlowMo;
-        lavaSpeed = playerConfig.lavaSpeed;
-        maxLavaDistance = playerConfig.maxLavaDistance;
-        initialMaxEnergy = playerConfig.initialMaxEnergy;
-        maxEnergyIncreasePerLv = playerConfig.maxEnergyIncreasePerLv;
-        timeSlowAmount = playerConfig.timeSlowAmount;
-        fuelPowerIncreasePerLv = playerConfig.fuelPowerIncreasePerLv;
-        energyDurabilityIncreasePerLv = playerConfig.energyDuribilityIncreasePerLv;
-    }
 
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
@@ -200,12 +189,12 @@ public class PlayerController : MonoBehaviour
     }
 
     void UpdateLava(){
-        if ((transform.position.y - lavaTrans.position.y) < maxLavaDistance + 15){
-            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y + lavaSpeed*Time.deltaTime/Time.timeScale);
+        if ((transform.position.y - lavaTrans.position.y) < playerConfig.maxLavaDistance + 15){
+            lavaTrans.position = new Vector2(transform.position.x, lavaTrans.position.y + playerConfig.lavaSpeed*Time.deltaTime/Time.timeScale);
 
         }
         else{
-            lavaTrans.position = new Vector2(transform.position.x, transform.position.y-(maxLavaDistance + 15));
+            lavaTrans.position = new Vector2(transform.position.x, transform.position.y-(playerConfig.maxLavaDistance + 15));
         }
     }
 
@@ -220,7 +209,7 @@ public class PlayerController : MonoBehaviour
         if (currentLevel < level){
             var levelDiff = level - currentLevel;
             for (var i = 0; i < levelDiff; i++){
-                gameManager.gameLevel++;
+                userData.gameLevel++;
                 generator.LevelUp();
                 currentLevel++;
             }
@@ -230,13 +219,13 @@ public class PlayerController : MonoBehaviour
     void ShowProjectile(){
         var velocity = new Vector2();
         var CurrentVelocity = rb.linearVelocity/2;
-        var energyNeed = minEnergyNeeded+(energyNeedMul * cursorReleasePos.magnitude);
+        var energyNeed = playerConfig.minEnergyNeeded+(playerConfig.energyNeedMul * cursorReleasePos.magnitude);
         var direction = (-cursorReleasePos).normalized;
         if(energyNeed > energyRemaining){
-            velocity = CurrentVelocity + direction*energyRemaining*energyForce/50;
+            velocity = CurrentVelocity + direction*energyRemaining*playerConfig.energyForce/50;
         }
         else{
-            velocity = CurrentVelocity + direction*energyNeed*energyForce/50;
+            velocity = CurrentVelocity + direction*energyNeed*playerConfig.energyForce/50;
         }
         float t = 0.0f;
         foreach(var dot in dots){
@@ -250,15 +239,15 @@ public class PlayerController : MonoBehaviour
 
     void OnCursorRelease(){
         rb.linearVelocity = rb.linearVelocity/2;
-        var energyNeed = minEnergyNeeded+(energyNeedMul * cursorReleasePos.magnitude);
+        var energyNeed = playerConfig.minEnergyNeeded+(playerConfig.energyNeedMul * cursorReleasePos.magnitude);
         var direction = (-cursorReleasePos).normalized;
         if(energyNeed > energyRemaining){
-            rb.AddForce(direction*energyRemaining*energyForce);
+            rb.AddForce(direction*energyRemaining*playerConfig.energyForce);
             energyRemaining = 0;
             cursorReleasePos = Vector2.zero;
             return;
         }
-        rb.AddForce(direction*energyNeed*energyForce);
+        rb.AddForce(direction*energyNeed*playerConfig.energyForce);
         // Debug.Log("Cursor released at : " + cursorReleasePos);
         energyRemaining -= energyNeed*energyWastePercentage;
         cursorReleasePos = Vector2.zero;
@@ -272,14 +261,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Energy"){
-            var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
+            var explodeForce = new Vector2
+                (UnityEngine.Random.Range(-playerConfig.maxExplodeForce, playerConfig.maxExplodeForce), 
+                UnityEngine.Random.Range(-playerConfig.maxExplodeForce/5, playerConfig.maxExplodeForce)
+            );
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
             generator.RemoveObject(other.transform, EObjectType.Energy);
             energyRemaining += energyRefuel;
             audioSource.Play();
         }
         if (other.gameObject.tag == "Bomb"){
-            var explodeForce = new Vector2(Random.Range(-maxExplodeForce, maxExplodeForce), Random.Range(-maxExplodeForce/5, maxExplodeForce));
+            var explodeForce = new Vector2(
+                UnityEngine.Random.Range(-playerConfig.maxExplodeForce, playerConfig.maxExplodeForce),
+                UnityEngine.Random.Range(-playerConfig.maxExplodeForce/5, playerConfig.maxExplodeForce)
+            );
             rb.AddForce(explodeForce, ForceMode2D.Impulse);
             generator.RemoveObject(other.transform, EObjectType.Bomb);
             energyRemaining -= 30;
