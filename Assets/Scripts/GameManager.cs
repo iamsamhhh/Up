@@ -12,9 +12,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     public bool cameFromGame, gamePaused;
 
     private void Awake() {
-        if (SaveManager.LoadObject("UserData", userData)){
-            Debug.Log("Success");
-        }
+        UserData.ResetUserData();
         if (!userData.currentSkin){
             userData.currentSkin = SkinList.defaultSkinList.list[0];
         }
@@ -31,7 +29,7 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         
     }
     public void SaveGame(){
-        SaveManager.SaveObject(userData, "UserData");
+        SaveManager.SaveObject(userData, userData.fileName);
     }
 
     public void ResetData(){
@@ -45,6 +43,6 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         userData.purchasedSkins.Clear();
         userData.purchasedSkins.Add(userData.currentSkin);
 
-        SaveManager.SaveObject(userData, "UserData");
+        SaveManager.SaveObject(userData, userData.fileName);
     }
 }

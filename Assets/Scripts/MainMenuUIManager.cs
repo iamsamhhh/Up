@@ -8,7 +8,9 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     [SerializeField]
     BGMManager bgmManager;
     UserData userData {
-        get {return UserData.userData;}
+        get {
+            Debug.Log(UserData.userData.name);
+            return UserData.userData;}
     }
     private void Awake() {
         guiMgr = GUIManager.instance;
@@ -89,14 +91,23 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     }
 
     private void OnSettingsBtn(){
-        var settingsPanelComponents = guiMgr.AddPanel("SettingsPanel", ELayer.Top)
-                                        .GetComponent<SettingsPanelComponents>();
-        guiMgr.OnClick(settingsPanelComponents.exitGameBtn, OnExitBtn);
-        guiMgr.OnClick(settingsPanelComponents.xBtn, OnSettingsXBtn);
-        guiMgr.OnClick(settingsPanelComponents.addCoinBtn, OnAddCoinBtn);
-        guiMgr.OnClick(settingsPanelComponents.setLevelBtn, OnSetLevelBtn);
-        guiMgr.OnClick(settingsPanelComponents.resetDataBtn, OnResetDataBtn);
-        guiMgr.OnClick(settingsPanelComponents.saveGameBtn, OnSaveGameBtn);
+        switch (EnvironmentConfig.environment.mode){
+            case EnvironmentMode.Developing:
+                var settingsPanelComponentsDev = guiMgr.AddPanel("SettingsPanelDev", ELayer.Top)
+                                                .GetComponent<SettingsPanelComponents>();
+                guiMgr.OnClick(settingsPanelComponentsDev.xBtn, OnSettingsXBtn);
+                guiMgr.OnClick(settingsPanelComponentsDev.addCoinBtn, OnAddCoinBtn);
+                guiMgr.OnClick(settingsPanelComponentsDev.setLevelBtn, OnSetLevelBtn);
+                guiMgr.OnClick(settingsPanelComponentsDev.resetDataBtn, OnResetDataBtn);
+                guiMgr.OnClick(settingsPanelComponentsDev.saveGameBtn, OnSaveGameBtn);
+                break;
+            case EnvironmentMode.Testing or EnvironmentMode.Release:
+                var settingsPanelComponents = guiMgr.AddPanel("SettingsPanelRelease", ELayer.Top)
+                                                .GetComponent<SettingsPanelComponents>();
+                guiMgr.OnClick(settingsPanelComponents.xBtn, OnSettingsXBtn);
+                guiMgr.OnClick(settingsPanelComponents.saveGameBtn, OnSaveGameBtn);
+                break;
+        }
     }
 
     private void OnSaveGameBtn()
@@ -113,7 +124,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
 
     private void OnSetLevelBtn()
     {
-        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().setLevelIF.text;
+        var value = guiMgr.GetPanel("SettingsPanelDev").GetComponent<SettingsPanelComponents>().setLevelIF.text;
         int num;
         if (int.TryParse(value, out num)){
             userData.gameLevel = num;
@@ -124,7 +135,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     }
 
     private void OnAddCoinBtn(){
-        var value = guiMgr.GetPanel("SettingsPanel").GetComponent<SettingsPanelComponents>().addCoinIF.text;
+        var value = guiMgr.GetPanel("SettingsPanelDev").GetComponent<SettingsPanelComponents>().addCoinIF.text;
         int num;
         if (int.TryParse(value, out num)){
             userData.coinCount += num;
@@ -135,7 +146,14 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     }
 
     private void OnSettingsXBtn(){
-        guiMgr.RemovePanel("SettingsPanel");
+        switch (EnvironmentConfig.environment.mode){
+            case EnvironmentMode.Developing:
+                guiMgr.RemovePanel("SettingsPanelDev");
+                break;
+            case EnvironmentMode.Testing or EnvironmentMode.Release:
+                guiMgr.RemovePanel("SettingsPanelRelease");
+                break;
+        }
     }
 
     private void OnAddMaxEnergyBtn() {
