@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     Transform lavaTrans, miniMapCamTrans;
     [SerializeField]
-    PostProcessVolume ppvNormal;
+    Volume ppvNormal;
 
     [SerializeField]
     PlayerConfig playerConfig;
