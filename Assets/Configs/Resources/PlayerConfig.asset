@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4ba5ecad83b4a8db4935d9c52d8a5b, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  energyForce: 50
+  energyForce: 100
   minEnergyNeeded: 5
   energyNeedMul: 2
   energyBurnOff: 1
   energyBurnOffSlowMo: 10
   initialFuelPower: 30
   initialMaxEnergy: 100
-  maxExplodeForce: 50
-  maxLavaDistance: 70
+  maxExplodeForce: 30
+  maxLavaDistance: 310
   lavaSpeed: 3
   maxEnergyIncreasePerLv: 30
   fuelPowerIncreasePerLv: 3
-  energyDuribilityIncreasePerLv: 2
+  energyDurabilityIncreasePerLv: 0
   timeSlowAmount: 10
   sloMoEffectFadeInTime: 0.2
   bounceBack: 0
