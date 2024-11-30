@@ -15,12 +15,13 @@ public class EnvironmentConfig : ScriptableObject
     private static EnvironmentConfig _environment;
 #if UNITY_EDITOR
     [UnityEditor.MenuItem("UserData/ResetAllData")]
-    private static void ResetAllData(){
+#endif
+    public static void ResetAllData(){
         environment.devData.ResetData();
         environment.testData.ResetData();
         environment.releaseData.ResetData();
     }
-#endif
+
 }
 
 public enum EnvironmentMode{
