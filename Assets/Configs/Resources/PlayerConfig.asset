@@ -19,12 +19,12 @@ MonoBehaviour:
   energyBurnOffSlowMo: 10
   initialFuelPower: 30
   initialMaxEnergy: 100
-  maxExplodeForce: 50
+  maxExplodeForce: 30
   maxLavaDistance: 70
   lavaSpeed: 3
   maxEnergyIncreasePerLv: 30
   fuelPowerIncreasePerLv: 3
-  energyDuribilityIncreasePerLv: 2
+  energyDurabilityIncreasePerLv: 0
   timeSlowAmount: 10
   sloMoEffectFadeInTime: 0.2
   bounceBack: 0
