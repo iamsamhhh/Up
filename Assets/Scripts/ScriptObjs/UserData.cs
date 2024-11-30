@@ -36,7 +36,21 @@ public class UserData : ScriptableObject
 
     private static UserData _userData;
 
-    public static void ResetUserData(){
+    public static void ResetUserDataReference(){
         _userData = null;
+    }
+
+    public void ResetData(){
+        coinCount = 0;
+        maxEnergyLv = 0;
+        fuelPowerLv = 0;
+        energyDurabilityLv = 0;
+        gameLevel = 1;
+        highestScore = 0;
+        currentSkin = SkinList.defaultSkinList.list[0];
+        purchasedSkins.Clear();
+        purchasedSkins.Add(userData.currentSkin);
+
+        SaveManager.SaveObject(this, fileName);
     }
 }

@@ -12,14 +12,18 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
     public bool cameFromGame, gamePaused;
 
     private void Awake() {
-        UserData.ResetUserData();
+        UserData.ResetUserDataReference();
         if (!userData.currentSkin){
             userData.currentSkin = SkinList.defaultSkinList.list[0];
+        }
+        foreach (var skin in userData.purchasedSkins){
+            if (!skin){
+                userData.purchasedSkins.Remove(skin);
+            }
         }
         if (userData.purchasedSkins.Count == 0){
             userData.purchasedSkins.Add(userData.currentSkin);
         }
-            
 
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
 	    Application.targetFrameRate = 120;
