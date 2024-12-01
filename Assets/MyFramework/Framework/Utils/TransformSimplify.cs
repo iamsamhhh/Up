@@ -59,6 +59,51 @@ namespace MyFramework
             localPos.z = z;
             transform.localPosition = localPos;
         }
+
+        public static void SetPosX(Transform transform, float x)
+        {
+            var position = transform.position;
+            position.x = x;
+            transform.position = position;
+        }
+
+        public static void SetPosY(Transform transform, float y)
+        {
+            var localPos = transform.localPosition;
+            localPos.y = y;
+            transform.localPosition = localPos;
+        }
+
+        public static void SetPosZ(Transform transform, float z)
+        {
+            var position = transform.position;
+            position.z = z;
+            transform.position = position;
+        }
+
+        public static void SetPosXY(Transform transform, float x, float y)
+        {
+            var position = transform.position;
+            position.x = x;
+            position.y = y;
+            transform.position = position;
+        }
+
+        public static void SetPosXZ(Transform transform, float x, float z)
+        {
+            var position = transform.position;
+            position.x = x;
+            position.z = z;
+            transform.position = position;
+        }
+
+        public static void SetPosYZ(Transform transform, float y, float z)
+        {
+            var position = transform.position;
+            position.y = y;
+            position.z = z;
+            transform.position = position;
+        }
         
         public static void AddChild(Transform transform, Transform childTrans)
         {
