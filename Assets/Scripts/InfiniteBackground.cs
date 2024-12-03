@@ -32,4 +32,8 @@ public class InfiniteBackground : MonoBehaviourSimplify
         }
     }
 
+    private void OnDestroy() {
+        RemoveAllLoacalUpdates();
+    }
+
 }

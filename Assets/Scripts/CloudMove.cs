@@ -16,4 +16,8 @@ public class CloudMove : MonoBehaviourSimplify
         OnStart(OnStart);
         OnUpdate(OnUpdate);
     }
+
+    private void OnDestroy() {
+        RemoveAllLoacalUpdates();
+    }
 }
