@@ -22,6 +22,15 @@ public class EnvironmentConfig : ScriptableObject
         environment.releaseData.ResetData();
     }
 
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("UserData/SaveAllData")]
+#endif
+    public static void SaveAllData(){
+        environment.devData.Save();
+        environment.testData.Save();
+        environment.releaseData.Save();
+    }
+
 }
 
 public enum EnvironmentMode{

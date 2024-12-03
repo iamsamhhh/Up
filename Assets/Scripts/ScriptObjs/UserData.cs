@@ -53,4 +53,8 @@ public class UserData : ScriptableObject
 
         SaveManager.SaveObject(this, fileName);
     }
+
+    public void Save(){
+        SaveManager.SaveObject(this, fileName);
+    }
 }
