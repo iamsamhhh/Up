@@ -20,12 +20,12 @@ public class UserData : ScriptableObject
                         break;
                     case EnvironmentMode.Testing:
                         if (SaveManager.LoadObject(EnvironmentConfig.environment.testData.fileName, EnvironmentConfig.environment.testData))
-                            Debug.Log("Userdata loaded");
+                            Debug.Log("User data loaded");
                         _userData = EnvironmentConfig.environment.testData;
                         break;
                     case EnvironmentMode.Release:
                         if (SaveManager.LoadObject(EnvironmentConfig.environment.releaseData.fileName, EnvironmentConfig.environment.releaseData))
-                            Debug.Log("Userdata loaded");
+                            Debug.Log("User data loaded");
                         _userData = EnvironmentConfig.environment.releaseData;
                         break;
                 }
@@ -51,7 +51,7 @@ public class UserData : ScriptableObject
         purchasedSkins.Clear();
         purchasedSkins.Add(userData.currentSkin);
 
-        SaveManager.SaveObject(this, fileName);
+        // SaveManager.SaveObject(this, fileName);
     }
 
     public void Save(){

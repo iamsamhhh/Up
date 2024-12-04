@@ -25,6 +25,7 @@ public class SkinBtn : MonoBehaviourSimplify
     public void OnClick(){
         if (userData.purchasedSkins.Contains(skin)){
             userData.currentSkin = skin;
+            BroadcastEvent("OnChangeSkin", skin);
         }
         else{
             if (userData.coinCount >= skin.cost){
@@ -46,6 +47,7 @@ public class SkinBtn : MonoBehaviourSimplify
         GUIManager.instance.GetPanel("MainMenu")
         .GetComponent<MainMenuComponents>()
         .coinCntTxt.text = userData.coinCount.ToString();
+        BroadcastEvent("OnChangeSkin", skin);
     }
 
     private void OnResetData(object sender){

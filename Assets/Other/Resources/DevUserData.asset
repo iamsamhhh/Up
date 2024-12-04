@@ -12,28 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522405646b8df407baf6a71054f5bff9, type: 3}
   m_Name: DevUserData
   m_EditorClassIdentifier: 
-  coinCount: 27
-  maxEnergyLv: 100
+  coinCount: 0
+  maxEnergyLv: 0
   fuelPowerLv: 0
   energyDurabilityLv: 0
   gameLevel: 1
-  highestScore: 338
+  highestScore: 0
   purchasedSkins:
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
-  - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
   - {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
   currentSkin: {fileID: 11400000, guid: 036474eeb936b4454b5057c8b7593f20, type: 2}
   fileName: DevUserData

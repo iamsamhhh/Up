@@ -9,7 +9,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     BGMManager bgmManager;
     UserData userData {
         get {
-            Debug.Log(UserData.userData.name);
+            // Debug.Log(UserData.userData.name);
             return UserData.userData;}
     }
     private void Awake() {

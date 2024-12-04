@@ -17,8 +17,17 @@ public class GameManager : MonoSingletonBaseAuto<GameManager>
         if (!userData.currentSkin){
             userData.currentSkin = SkinList.defaultSkinList.list[0];
         }
-        userData.purchasedSkins.Remove(null);
-        if (userData.purchasedSkins.Count == 0){
+        List<Skin> skinToBeRemove = new List<Skin>();
+        foreach (var skin in userData.purchasedSkins){
+            if (!skin){
+                skinToBeRemove.Add(skin);
+            }
+        }
+        foreach (var skin in skinToBeRemove){
+            userData.purchasedSkins.Remove(skin);
+        }
+        skinToBeRemove.Clear();
+        if (userData.purchasedSkins.Count <= 0){
             userData.purchasedSkins.Add(userData.currentSkin);
         }
 
