@@ -11,11 +11,7 @@ public class InfiniteBackground : MonoBehaviourSimplify
     [SerializeField]
     Transform playerTrans;
 
-    private void Awake() {
-        OnUpdate(OnUpdate);
-    }
-
-    private void OnUpdate() {
+    private void Update() {
         if (playerTrans.position.x > backgrounds[backgroundIndex[1]].position.x + backgroundWidth/2){
             TransformSimplify.SetPosX(backgrounds[backgroundIndex[0]], backgrounds[backgroundIndex[2]].position.x + backgroundWidth);
             var temp = backgroundIndex[0];
@@ -31,9 +27,4 @@ public class InfiniteBackground : MonoBehaviourSimplify
             backgroundIndex[0] = temp;
         }
     }
-
-    private void OnDestroy() {
-        RemoveAllLoacalUpdates();
-    }
-
 }

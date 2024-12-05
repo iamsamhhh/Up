@@ -4,20 +4,11 @@ using MyFramework;
 public class CloudMove : MonoBehaviourSimplify
 {
     private float speed;
-    void OnStart(){
+    void Start(){
         speed = Random.Range(-5f, 5f);
     }
 
-    void OnUpdate(){
+    void Update(){
         TransformSimplify.SetPosX(transform, transform.position.x + speed*Time.deltaTime);
-    }
-
-    private void Awake() {
-        OnStart(OnStart);
-        OnUpdate(OnUpdate);
-    }
-
-    private void OnDestroy() {
-        RemoveAllLoacalUpdates();
     }
 }
