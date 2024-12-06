@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Starborn_0: 2250783028268088566
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
