@@ -145,7 +145,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -963,7 +963,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -972,7 +972,41 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Stars2_0: -8565262563727552045
+      Stars2_1: 4418911924433872786
+      Stars2_10: 2315470393480696439
+      Stars2_11: -6579915863501230930
+      Stars2_12: -184480019124975045
+      Stars2_13: -7773058774989155219
+      Stars2_14: 9006376885669990092
+      Stars2_15: -6575142158842466233
+      Stars2_16: -6073346295230322726
+      Stars2_17: 3827104539834669026
+      Stars2_18: 6091274004069765169
+      Stars2_19: -1324801063645579470
+      Stars2_2: -8127626887288653207
+      Stars2_20: -5114677777273970118
+      Stars2_21: 4276768127038600711
+      Stars2_22: 5827074544831619717
+      Stars2_23: 909385160165418507
+      Stars2_24: -6138978186341367501
+      Stars2_25: -7408366454091554923
+      Stars2_26: 8950336373415280671
+      Stars2_27: 1395031741037923527
+      Stars2_28: 5458879440088899290
+      Stars2_29: 3253002489809129599
+      Stars2_3: -3459066398629794070
+      Stars2_30: -272878415285241489
+      Stars2_31: 2408804435101072944
+      Stars2_32: -6669229132679103578
+      Stars2_33: -9074430419804921822
+      Stars2_4: -8250603754258974525
+      Stars2_5: -4045959534321656988
+      Stars2_6: 6028443141282620896
+      Stars2_7: 3275353940360148119
+      Stars2_8: -8942147590417281120
+      Stars2_9: -8891819530631431438
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
