@@ -2,19 +2,30 @@ using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using Apple.GameKit;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 
 public class AppleGameCenter : MonoBehaviour
 {
-    string Signature;
+    byte[] Signature;
     string TeamPlayerID;
-    string Salt;
+    byte[] Salt;
     string PublicKeyUrl;
-    string Timestamp;
+    ulong Timestamp;
 
     // Start is called before the first frame update
     async void Start()
     {
         await Login();
+        var achievements = await GKAchievement.LoadAchievements();
+
+        foreach (var a in achievements) 
+        {
+            Debug.Log($"Achievement: {a.Identifier}");
+        }
+        var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Achievements);
+        // await for user to dismiss...
+        await gameCenter.Present();
     }
 
     public async Task Login()
@@ -30,15 +41,15 @@ public class AppleGameCenter : MonoBehaviour
             Debug.Log($"Local Player: {localPlayer.DisplayName}");
 
             // Fetch the items.
-            var fetchItemsResponse =  await GKLocalPlayer.Local.FetchItems();
+            var fetchItemsResponse =  await GKLocalPlayer.Local.FetchItemsForIdentityVerificationSignature();
 
-            Signature = Convert.ToBase64String(fetchItemsResponse.GetSignature());
+            Signature = fetchItemsResponse.GetSignature();
             TeamPlayerID = localPlayer.TeamPlayerId;
             Debug.Log($"Team Player ID: {TeamPlayerID}");
 
-            Salt = Convert.ToBase64String(fetchItemsResponse.GetSalt());
+            Salt = fetchItemsResponse.GetSalt();
             PublicKeyUrl = fetchItemsResponse.PublicKeyUrl;
-            Timestamp = fetchItemsResponse.Timestamp.ToString();
+            Timestamp = fetchItemsResponse.Timestamp;
 
             Debug.Log($"GameKit Authentication: signature => {Signature}");
             Debug.Log($"GameKit Authentication: publickeyurl => {PublicKeyUrl}");
