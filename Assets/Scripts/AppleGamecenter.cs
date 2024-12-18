@@ -1,11 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using Apple.GameKit;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
+using MyFramework;
 
-public class AppleGameCenter : MonoBehaviour
+public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
 {
     byte[] Signature;
     string TeamPlayerID;
@@ -17,15 +15,6 @@ public class AppleGameCenter : MonoBehaviour
     async void Start()
     {
         await Login();
-        var achievements = await GKAchievement.LoadAchievements();
-
-        foreach (var a in achievements) 
-        {
-            Debug.Log($"Achievement: {a.Identifier}");
-        }
-        var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Achievements);
-        // await for user to dismiss...
-        await gameCenter.Present();
     }
 
     public async Task Login()
@@ -60,5 +49,17 @@ public class AppleGameCenter : MonoBehaviour
         {
             Debug.Log("AppleGameCenter player already logged in.");
         }
+    }
+
+    public async void OpenAchievements(){
+        var achievements = await GKAchievementDescription.LoadAchievementDescriptions();
+
+        foreach (var a in achievements) 
+        {
+            Debug.Log($"Achievement: {a.Identifier}");
+        }
+        var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Achievements);
+        // await for user to dismiss...
+        await gameCenter.Present();
     }
 }
