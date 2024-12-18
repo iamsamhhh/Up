@@ -1,7 +1,6 @@
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 namespace MyFramework{
     public partial class ReuseMenuItemExample
@@ -13,3 +12,4 @@ namespace MyFramework{
         }
     }
 }
+#endif

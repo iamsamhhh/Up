@@ -4,6 +4,7 @@ namespace MyFramework
 {
     public class DelayWithCoroutine : MonoBehaviourSimplify
     {
+#if UNITY_EDITOR
         private void Start()
         {
             Delay(5.0f, () =>
@@ -12,7 +13,7 @@ namespace MyFramework
             });
         }
 
-#if UNITY_EDITOR
+
         [UnityEditor.MenuItem("MyFramework/Example/10.Delay example", false, 10)]
         private static void MenuClickd()
         {

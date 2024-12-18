@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Apple.GameKit;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
@@ -22,15 +24,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     AudioSource audioSource;
 
-    // Configs
-    [Obsolete("User playerConfig instead")]
-    private float energyForce, maxExplodeForce,
-    minEnergyNeeded, energyNeedMul,
-    initialFuelPower, energyBurnOff,
-    energyBurnOffSlowMo, initialMaxEnergy, 
-    maxLavaDistance, lavaSpeed, maxEnergyIncreasePerLv,
-    timeSlowAmount, fuelPowerIncreasePerLv,
-    energyDurabilityIncreasePerLv;
+    GKAchievement intoTheSpace;
+
 
     private float energyRemaining;
 
@@ -65,6 +60,7 @@ public class PlayerController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
+        GetAchievements();
         SetUpVariables();
     }
 
@@ -91,6 +87,7 @@ public class PlayerController : MonoBehaviour
         energyRemaining -= energyWastePercentage*Time.deltaTime/(1/playerConfig.energyBurnOff);
         UpdateHeightIndicator();
         slider.fillAmount = energyRemaining/maxEnergy;
+        CheckAchievements();
 
         // gameover
         if (transform.position.y <= lavaTrans.position.y + 15.5 & !gameOver){
@@ -181,7 +178,6 @@ public class PlayerController : MonoBehaviour
         ppvNormal.weight = 1f;
     }
 
-
     void OnCursorPress(){
         cursorReleasePos += new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         // Debug.Log("Cursor pressed at : " + cursorReleasePos);
@@ -202,6 +198,23 @@ public class PlayerController : MonoBehaviour
         heightSlider.fillAmount = transform.position.y / 1000;
         heightText.rectTransform.localPosition = new Vector3(heightText.rectTransform.localPosition.x, heightSlider.fillAmount * 600 - 300, heightText.rectTransform.localPosition.z);
         heightText.text = ((int)(transform.position.y+(levelWhenGameStart-1)*1000)).ToString();
+    }
+
+    async void GetAchievements(){
+        intoTheSpace = await AppleGameCenter.instance.GetAchievementAsync("1001");
+    }
+
+    void CheckAchievements(){
+        if (intoTheSpace == null)
+            return;
+        if (!intoTheSpace.IsCompleted){
+            var currentPercentage = (int)(transform.position.y+(levelWhenGameStart-1)*1000)/10;
+            if (currentPercentage>=100){
+                intoTheSpace.PercentComplete = 100;
+                intoTheSpace.ShowCompletionBanner = true;
+                AppleGameCenter.instance.ReportAchievement(intoTheSpace);
+            }
+        }
     }
 
     void UpdateLevel(){

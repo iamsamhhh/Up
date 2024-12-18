@@ -2,48 +2,65 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Apple.GameKit;
 using MyFramework;
+using System.Linq;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using System;
 
 public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
 {
-    byte[] Signature;
-    string TeamPlayerID;
-    byte[] Salt;
-    string PublicKeyUrl;
-    ulong Timestamp;
+    // byte[] Signature;
+    // string TeamPlayerID;
+    // byte[] Salt;
+    // string PublicKeyUrl;
+    // ulong Timestamp;
+    async void Awake()
+	{
+		try
+		{
+			await UnityServices.InitializeAsync();
+		}
+		catch (Exception e)
+		{
+			Debug.LogException(e);
+		}
+	}
 
     // Start is called before the first frame update
     async void Start()
     {
-        await Login();
+        if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing)
+            await Login();
     }
 
     public async Task Login()
     {
         if (!GKLocalPlayer.Local.IsAuthenticated)
         {
-            // Perform the authentication.
             var player = await GKLocalPlayer.Authenticate();
-            Debug.Log($"GameKit Authentication: player {player}");
+            Debug.Log($"GameKit Authentication: isAuthenticated => {player.IsAuthenticated}");
 
             // Grab the display name.
             var localPlayer = GKLocalPlayer.Local;
             Debug.Log($"Local Player: {localPlayer.DisplayName}");
-
+            
             // Fetch the items.
             var fetchItemsResponse =  await GKLocalPlayer.Local.FetchItemsForIdentityVerificationSignature();
 
-            Signature = fetchItemsResponse.GetSignature();
-            TeamPlayerID = localPlayer.TeamPlayerId;
-            Debug.Log($"Team Player ID: {TeamPlayerID}");
+            // Signature = fetchItemsResponse.GetSignature();
+            // TeamPlayerID = localPlayer.TeamPlayerId;
+            // Debug.Log($"Team Player ID: {TeamPlayerID}");
 
-            Salt = fetchItemsResponse.GetSalt();
-            PublicKeyUrl = fetchItemsResponse.PublicKeyUrl;
-            Timestamp = fetchItemsResponse.Timestamp;
+            // Salt = fetchItemsResponse.GetSalt();
+            // PublicKeyUrl = fetchItemsResponse.PublicKeyUrl;
+            // Timestamp = fetchItemsResponse.Timestamp;
 
-            Debug.Log($"GameKit Authentication: signature => {Signature}");
-            Debug.Log($"GameKit Authentication: publickeyurl => {PublicKeyUrl}");
-            Debug.Log($"GameKit Authentication: salt => {Salt}");
-            Debug.Log($"GameKit Authentication: Timestamp => {Timestamp}");
+            // Debug.Log($"GameKit Authentication: signature => {Signature}");
+            // Debug.Log($"GameKit Authentication: publickeyurl => {PublicKeyUrl}");
+            // Debug.Log($"GameKit Authentication: salt => {Salt}");
+            // Debug.Log($"GameKit Authentication: Timestamp => {Timestamp}");
+
+            // await SignInWithAppleGameCenterAsync(Signature.ToString(), TeamPlayerID, PublicKeyUrl, Salt.ToString(), Timestamp);
         }
         else
         {
@@ -51,15 +68,56 @@ public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
         }
     }
 
-    public async void OpenAchievements(){
-        var achievements = await GKAchievementDescription.LoadAchievementDescriptions();
+    // async Task SignInWithAppleGameCenterAsync(string signature, string teamPlayerId, string publicKeyURL, string salt, ulong timestamp)
+    // {
+    //     try
+    //     {
+    //         await AuthenticationService.Instance.SignInWithAppleGameCenterAsync(signature, teamPlayerId, publicKeyURL, salt, timestamp);
+    //         Debug.Log("SignIn is successful.");
+    //     }
+    //     catch (AuthenticationException ex)
+    //     {
+    //         // Compare error code to AuthenticationErrorCodes
+    //         // Notify the player with the proper error message
+    //         Debug.LogException(ex);
+    //     }
+    //     catch (RequestFailedException ex)
+    //     {
+    //         // Compare error code to CommonErrorCodes
+    //         // Notify the player with the proper error message
+    //         Debug.LogException(ex);
+    //     }
+    // }
 
-        foreach (var a in achievements) 
-        {
-            Debug.Log($"Achievement: {a.Identifier}");
+    public async void OpenAchievements(){
+        // var achievements = await GKAchievementDescription.LoadAchievementDescriptions();
+
+        // foreach (var a in achievements) 
+        // {
+        //     Debug.Log($"Achievement: {a.Identifier}");
+        // }
+        if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing){
+            var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Achievements);
+            // await for user to dismiss...
+            await gameCenter.Present();
         }
-        var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Achievements);
-        // await for user to dismiss...
-        await gameCenter.Present();
+    }
+
+    public async void ReportAchievement(GKAchievement achievement){
+        if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing)
+            await GKAchievement.Report(achievement);
+    }
+
+    public async Task<GKAchievement> GetAchievementAsync(string id){
+        if (EnvironmentConfig.environment.mode == EnvironmentMode.Developing)
+            return null;
+        var achievements = await GKAchievement.LoadAchievements();
+
+        // Only completed achievements are returned.
+        var achievement = achievements.FirstOrDefault(a => a.Identifier == id);
+
+        // If null, initialize it
+        achievement ??= GKAchievement.Init(id);
+        return achievement;
     }
 }
