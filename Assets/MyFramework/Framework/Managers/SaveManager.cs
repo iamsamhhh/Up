@@ -4,7 +4,6 @@ using UnityEngine;
 using System.IO;
 using System.Xml;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEditor.Build.Content;
 
 namespace MyFramework{
 

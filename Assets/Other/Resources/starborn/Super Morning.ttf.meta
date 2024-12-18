@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ca0669bfa956d49a0babb65d332bb018
+guid: 6febccd855bd64133977163bbe421ca7
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Starborn
+  - Super Morning
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
