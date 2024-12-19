@@ -9,7 +9,9 @@ namespace MyFramework
         {
             Delay(5.0f, () =>
             {
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
+#endif
             });
         }
 
