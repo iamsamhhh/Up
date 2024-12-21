@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6e5bd1987604c8b948fbaffefce7f5, type: 3}
   m_Name: EnvironmentConfig
   m_EditorClassIdentifier: 
-  mode: 0
+  mode: 1
   devData: {fileID: 11400000, guid: 1f29804411fc34f71ad51e9a764d7268, type: 2}
   testData: {fileID: 11400000, guid: f136f509f88664f1f82e6cfcf35b3aa5, type: 2}
   releaseData: {fileID: 11400000, guid: d4dc093129b624daf8b975d5ea8cbbed, type: 2}

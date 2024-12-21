@@ -14,6 +14,7 @@ public class SkinMove : MonoBehaviourSimplify
     void OnChangeSkin(object _skin){
         // Debug.Log("On change skin");
         Skin skin = (Skin)_skin;
+        if (!skin) return;
         if (skin.haveTrail){
             var trailRenderer = GetComponent<TrailRenderer>();
             trailRenderer.enabled = true;

@@ -1,9 +1,10 @@
 {
   "dependencies": {
-    "com.apple.unityplugin.core": "file:/Users/macmini1tb-sam/Downloads/unityplugins-main/Build/com.apple.unityplugin.core-3.1.5.tgz",
-    "com.apple.unityplugin.gamekit": "file:/Users/macmini1tb-sam/Downloads/unityplugins-main/Build/com.apple.unityplugin.gamekit-3.0.0.tgz",
+    "com.apple.unityplugin.core": "file:../Plugins/com.apple.unityplugin.core-3.1.5.tgz",
+    "com.apple.unityplugin.gamekit": "file:../Plugins/com.apple.unityplugin.gamekit-3.0.0.tgz",
     "com.unity.cinemachine": "2.10.1",
     "com.unity.collab-proxy": "2.5.2",
+    "com.unity.device-simulator.devices": "1.0.0",
     "com.unity.feature.2d": "2.0.1",
     "com.unity.ide.rider": "3.0.31",
     "com.unity.ide.visualstudio": "2.0.22",
