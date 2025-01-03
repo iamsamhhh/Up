@@ -40,5 +40,11 @@ namespace MyFramework{
 
             _update();
         }
+
+        private void OnDestroy() {
+            _update = null;
+            _awake = null;
+            _start = null;
+        }
     }
 }

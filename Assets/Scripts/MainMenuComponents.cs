@@ -6,7 +6,7 @@ public class MainMenuComponents : MonoBehaviour
 {
 
     public Button addMaxEnergyBtn, addEnergyRefuelBtn, addEnergyWasteBtn,
-        startGameBtn, settingsBtn;
+        startGameBtn, settingsBtn, acheivementBtn, leaderBoardBtn;
 
     public TMP_Text maxEnergyLvTxt, energyRefuelLvTxt, energyWasteLvTxt,
         coinCntTxt, gameLevelTxt,

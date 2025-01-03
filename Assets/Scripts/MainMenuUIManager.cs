@@ -9,7 +9,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
     BGMManager bgmManager;
     UserData userData {
         get {
-            Debug.Log(UserData.userData.name);
+            // Debug.Log(UserData.userData.name);
             return UserData.userData;}
     }
     private void Awake() {
@@ -53,7 +53,8 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         guiMgr.OnClick(mainMenuComponents.addMaxEnergyBtn, OnAddMaxEnergyBtn);
         guiMgr.OnClick(mainMenuComponents.addEnergyRefuelBtn, OnAddEnergyRefuelBtn);
         guiMgr.OnClick(mainMenuComponents.addEnergyWasteBtn, OnAddEnergyWasteBtn);
-
+        guiMgr.OnClick(mainMenuComponents.acheivementBtn, AppleGameCenter.instance.OpenAchievements);
+        guiMgr.OnClick(mainMenuComponents.leaderBoardBtn, AppleGameCenter.instance.OpenLeaderBoards);
         RefreshUI();
     }
 
@@ -92,7 +93,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
 
     private void OnSettingsBtn(){
         switch (EnvironmentConfig.environment.mode){
-            case EnvironmentMode.Developing:
+            case EnvironmentMode.Developing or EnvironmentMode.Testing:
                 var settingsPanelComponentsDev = guiMgr.AddPanel("SettingsPanelDev", ELayer.Top)
                                                 .GetComponent<SettingsPanelComponents>();
                 guiMgr.OnClick(settingsPanelComponentsDev.xBtn, OnSettingsXBtn);
@@ -101,7 +102,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
                 guiMgr.OnClick(settingsPanelComponentsDev.resetDataBtn, OnResetDataBtn);
                 guiMgr.OnClick(settingsPanelComponentsDev.saveGameBtn, OnSaveGameBtn);
                 break;
-            case EnvironmentMode.Testing or EnvironmentMode.Release:
+            case EnvironmentMode.Release:
                 var settingsPanelComponents = guiMgr.AddPanel("SettingsPanelRelease", ELayer.Top)
                                                 .GetComponent<SettingsPanelComponents>();
                 guiMgr.OnClick(settingsPanelComponents.xBtn, OnSettingsXBtn);
