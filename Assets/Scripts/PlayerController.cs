@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Apple.Core;
 using Apple.GameKit;
+using Apple.GameKit.Leaderboards;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
     AudioSource audioSource;
 
     GKAchievement intoTheSpace;
+    GKLeaderboard highScore;
 
 
     private float energyRemaining;
@@ -61,6 +64,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         GetAchievements();
+        GetLeaderboards();
         SetUpVariables();
     }
 
@@ -131,9 +135,14 @@ public class PlayerController : MonoBehaviour
 
     void GameOver(){
         SaveGame();
+        UpdateLeaderboard();
         // rb.bodyType = RigidbodyType2D.Static;
         Time.timeScale = 0;
         gameOver = true;
+    }
+
+    public void UpdateLeaderboard(){
+        AppleGameCenter.instance.SubmitNewScore(highScore, (long)(transform.position.y+(levelWhenGameStart-1)*1000), 0);
     }
 
     public void SaveGame(){
@@ -202,6 +211,10 @@ public class PlayerController : MonoBehaviour
 
     async void GetAchievements(){
         intoTheSpace = await AppleGameCenter.instance.GetAchievementAsync("1001");
+    }
+
+    async void GetLeaderboards(){
+        highScore = await AppleGameCenter.instance.GetLeaderboardAsync("0001");
     }
 
     void CheckAchievements(){

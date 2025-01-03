@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections;
 using Apple.GameKit;
+using Apple.GameKit.Leaderboards;
 
 
 namespace MyFramework.SocialPlatforms
@@ -15,6 +16,10 @@ namespace MyFramework.SocialPlatforms
         public Task Report();
     }
 
+    public interface ILeaderboard{
+        public Task SubmitScore(long score, long context);
+    }
+
     public class Achievement{
         IAchievement achievement;
 
@@ -23,9 +28,17 @@ namespace MyFramework.SocialPlatforms
                 await achievement.Report();
         }
     }
-    public class LeaderBoard {
+    public class GameCenterLeaderBoard : ILeaderboard {
+        GKLeaderboard leaderboard;
 
+        public async Task SubmitScore(long score, long context)
+        {
+            var player = GKLocalPlayer.Local;
+            await leaderboard.SubmitScore(score, context, player);
+        }
     }
+
+
     public class GameCenterAchievement : IAchievement {
         GKAchievement achievement;
         public async Task Report(){

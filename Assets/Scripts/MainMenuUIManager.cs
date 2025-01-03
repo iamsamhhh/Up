@@ -54,7 +54,7 @@ public class MainMenuUIManager : MonoBehaviourSimplify
         guiMgr.OnClick(mainMenuComponents.addEnergyRefuelBtn, OnAddEnergyRefuelBtn);
         guiMgr.OnClick(mainMenuComponents.addEnergyWasteBtn, OnAddEnergyWasteBtn);
         guiMgr.OnClick(mainMenuComponents.acheivementBtn, AppleGameCenter.instance.OpenAchievements);
-
+        guiMgr.OnClick(mainMenuComponents.leaderBoardBtn, AppleGameCenter.instance.OpenLeaderBoards);
         RefreshUI();
     }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using System;
+using Apple.GameKit.Leaderboards;
 
 public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
 {
@@ -103,9 +104,28 @@ public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
         }
     }
 
+    public async void OpenLeaderBoards(){
+        // var achievements = await GKAchievementDescription.LoadAchievementDescriptions();
+
+        // foreach (var a in achievements) 
+        // {
+        //     Debug.Log($"Achievement: {a.Identifier}");
+        // }
+        if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing){
+            var gameCenter = GKGameCenterViewController.Init(GKGameCenterViewController.GKGameCenterViewControllerState.Leaderboards);
+            // await for user to dismiss...
+            await gameCenter.Present();
+        }
+    }
+
     public async void ReportAchievement(GKAchievement achievement){
         if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing)
             await GKAchievement.Report(achievement);
+    }
+
+    public async void SubmitNewScore(GKLeaderboard leaderboard, long score, long context){
+        if (EnvironmentConfig.environment.mode != EnvironmentMode.Developing)
+            await leaderboard.SubmitScore(score, context, GKLocalPlayer.Local);
     }
 
     public async Task<GKAchievement> GetAchievementAsync(string id){
@@ -119,5 +139,14 @@ public class AppleGameCenter : MonoSingletonBaseAuto<AppleGameCenter>
         // If null, initialize it
         achievement ??= GKAchievement.Init(id);
         return achievement;
+    }
+
+    public async Task<GKLeaderboard> GetLeaderboardAsync(string id){
+        if (EnvironmentConfig.environment.mode == EnvironmentMode.Developing)
+            return null;
+        var leaderboards = await GKLeaderboard.LoadLeaderboards(id);
+        var leaderboard = leaderboards.FirstOrDefault();
+
+        return leaderboard;
     }
 }

@@ -24,6 +24,7 @@ public class UIEventInGame : MonoBehaviour
 
     public void OnPauseMenuBtn(){
         player.SaveGame();
+        player.UpdateLeaderboard();
         gameManager.cameFromGame = true;
         gameManager.gamePaused = false;
         LevelMgr.instance.LoadScene("MainMenu");
